@@ -1,0 +1,61 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.slider {
+  width:90%;
+}
+canvas {
+  display: block;
+  margin: auto;
+}
+.flex-item {
+  flex-grow: 1;
+  text-align: center;
+}
+.flex-item-checkboxes {
+  flex-grow: 1;
+  flex-direction: column;
+  text-align: center;
+}
+.slider-container{
+  display:flex;
+  width: 70%;
+  margin: auto;
+}
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+.IntroText {
+  padding: 50px;
+}
+.DownloadLinks {
+  padding: 50px;
+}
+.Kilder {
+  padding: 50px;
+}
+.Photos {
+  padding: 50px;
+}
+div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 180px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
