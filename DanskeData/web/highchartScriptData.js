@@ -80,8 +80,8 @@ Highcharts.chart('containerConfirmed', {
     // },
 
     data: {
-        csvURL: 'web/PCRconfirmed.csv'
-        // csvURL: window.location.origin + '/web/PCRconfirmed.csv'
+        // csvURL: 'web/PCRconfirmed.csv'
+        csvURL: window.location.origin + '/web/PCRconfirmed.csv'
     },
 
     plotOptions: {
@@ -101,3 +101,5 @@ Highcharts.chart('containerConfirmed', {
         },
     }
 });
+console.log(window.location.origin)
+console.log(window.location)
