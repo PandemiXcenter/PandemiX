@@ -1,5 +1,6 @@
 
 var curPath = window.location.pathname.replace("index.html","")
+var fullPath = window.location.origin + curPath
 Highcharts.chart('containerNumTests', {
 
     title: {
@@ -12,7 +13,7 @@ Highcharts.chart('containerNumTests', {
 
     data: {
         // csvURL: window.location.origin + '/web/NumTests.csv'
-        csvURL: curPath + 'NumTests.csv'
+        csvURL: fullPath + 'NumTests.csv'
     },
 
     plotOptions: {
@@ -46,7 +47,7 @@ Highcharts.chart('containerPosPct', {
     // },
 
     data: {
-        csvURL: curPath + 'PosPct.csv'
+        csvURL: fullPath + 'PosPct.csv'
         // csvURL: window.location.origin + '/web/PosPct.csv'
         // csv: '/web/AntigenTestsCleaned.csv'
         // csv: document.getElementById('csv').innerHTML
@@ -82,7 +83,7 @@ Highcharts.chart('containerConfirmed', {
 
     data: {
         // csvURL: 'web/PCRconfirmed.csv'
-        csvURL: curPath + 'PCRconfirmed.csv'
+        csvURL: fullPath + 'PCRconfirmed.csv'
     },
 
     plotOptions: {
@@ -103,3 +104,4 @@ Highcharts.chart('containerConfirmed', {
     }
 });
 console.log(curPath)
+console.log(fullPath)
