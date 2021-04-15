@@ -10,7 +10,8 @@ Highcharts.chart('containerNumTests', {
     // },
 
     data: {
-        csvURL: window.location.origin + '/web/NumTests.csv'
+        // csvURL: window.location.origin + '/web/NumTests.csv'
+        csvURL: 'web/NumTests.csv'
     },
 
     plotOptions: {
@@ -44,7 +45,8 @@ Highcharts.chart('containerPosPct', {
     // },
 
     data: {
-        csvURL: window.location.origin + '/web/PosPct.csv'
+        csvURL: 'web/PosPct.csv'
+        // csvURL: window.location.origin + '/web/PosPct.csv'
         // csv: '/web/AntigenTestsCleaned.csv'
         // csv: document.getElementById('csv').innerHTML
     },
@@ -78,7 +80,8 @@ Highcharts.chart('containerConfirmed', {
     // },
 
     data: {
-        csvURL: window.location.origin + '/web/PCRconfirmed.csv'
+        csvURL: 'web/PCRconfirmed.csv'
+        // csvURL: window.location.origin + '/web/PCRconfirmed.csv'
     },
 
     plotOptions: {
