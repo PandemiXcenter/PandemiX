@@ -103,5 +103,3 @@ Highcharts.chart('containerConfirmed', {
         },
     }
 });
-console.log(curPath)
-console.log(fullPath)
