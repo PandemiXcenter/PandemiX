@@ -1,0 +1,46 @@
+Her undersøges hvordan vaccinationen påvirker det forvetede antal indlæggelser man ville se hvis man åbnede samfundet op som situationen ser ud pt.
+
+Det ses at den mest udastte befolkningsgruppe, som udgøres af befolkningens ældre borgere allerede er blevet vaccineret.
+## Bedre sprogbrug?
+
+Til bage er du den del af befolkningen hvor risikoen for indslæggelser er mindre end den nu vaccinered gruppe, men ikke forsvindende lille.
+
+Den opsatte model består i følgende:
+
+* Befolkningen opdeles efter alder, og regner med at den primære smitte foregår inden for disse aldersgrupperinger. 
+Altså er den smitte som foregår mellem disse aldersgrupper regnet som neglegibel. 
+## Dette er formentlig en forsimpling af virkeligheden.
+
+* Man regner med at der i en given aldersgruppe, vil være en naturlig forekommende immunitet, ved at en given del af denne aldersgruppe allerede har været igennem et smitteforløb. 
+Denne proportion er estimeret til at være 8%.
+## Dette punkt kan kritiseres ud fra at de alder ældste aldersgrupper måske har en dødsrate så høj at en ratio af disse aldersgruppers naturlige immunitet, formentlig er knapt så høj, som for den øvrige befolkning.
+
+* Man regner med at indlæggelsesricikoen for ikke-vaccinerede er givet ud fra fig. ?? 
+## @Rasmus her ska der være en fig ref til indlæggelsesdiagrammet...
+
+* Man regner med at vaccinaton og immunisering gennem et smitteforløb, er uafhængige begivenheder. 
+Dvs. at sandsynligheden for at være immuniseret i en given aldersgruppe er 
+P(V) + P(DI) - P(DI)*P(V)
+hvor P(V) er vaccinedækningen i den givne aldersgruppe, men P(DI) er sandsynligheden for at have opnået immunitet gennem et sygdomsforløb (Disease Immunity)
+
+* Flokimmunitet opnås idet ratioen 
+r = 1 - 1/R_0 
+har opnået immunitet. 
+Der medregnes derfor ikke overshoot ifht forventede indlæggelser.
+## skal overshoot uddybes her?
+Der medregnes altså ikke alle de indlæggelser som vil opstå efter flokimmuniteten er opnået. 
+Dvs. de eneste indlæggelser som "tæller" i dette estimat vil være de indlæggelser som fremkommer som følge af manglende immunitet før grænsen for flokimmunitet er opnået.
+
+---
+
+Regnestykket går da ud på at se hvor mange indlæggelser der forventelgt vil finde sted på baggrund af disse antagelser.
+
+ved hjælp fra SSIs vaccinedata, kan dette regnestykke er laves, dels for den enkelte aldersgruppe, dels for den samlede befolkning.
+
+kan resultaterne illustreres og beskrives som følger:
+
+
+
+
+
+
