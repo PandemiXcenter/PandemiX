@@ -1,0 +1,9 @@
+[0] Config.pm:304> INFO - This is Biber 2.12
+[0] Config.pm:307> INFO - Logfile is 'case_hospital_rate.blg'
+[37] biber:315> INFO - === Tue May 11, 2021, 13:44:57
+[67] Biber.pm:371> INFO - Reading 'case_hospital_rate.bcf'
+[145] Biber.pm:889> INFO - Found 0 citekeys in bib section 0
+[154] Utils.pm:193> WARN - The file 'case_hospital_rate.bcf' does not contain any citations!
+[163] bbl.pm:636> INFO - Writing 'case_hospital_rate.bbl' with encoding 'UTF-8'
+[163] bbl.pm:739> INFO - Output to case_hospital_rate.bbl
+[164] Biber.pm:110> INFO - WARNINGS: 1
