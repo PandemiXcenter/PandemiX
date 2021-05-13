@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{tikz}
+% \usepackage{tikz}
 \usepackage[italicdiff]{physics}
 \usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usepackage{float}
@@ -23,7 +23,7 @@
 Her illustreres hvordan vaccinationsprogrammet medvirker til det forventede antal indlæggelser ved total genåbning af det danske samfund.
 \end{abstract}
 
-\section*{Antagelser}
+\section*{Flokimmunitet}
 % Her undersøges hvordan vaccinationen påvirker det forvetede antal indlæggelser man ville se hvis man åbnede samfundet op som situationen ser ud pt.
 
 Det ses at den mest udastte befolkningsgruppe, som udgøres af befolkningens ældre borgere allerede er blevet vaccineret.
@@ -51,7 +51,7 @@ $$P(V) + P(DI) - P(DI)*P(V)$$
 hvor $P(V)$ er vaccinedækningen i den givne aldersgruppe, og $P(DI)$ er sandsynligheden for at have opnået immunitet gennem et sygdomsforløb (Disease Immunity)
 
 \item Flokimmunitet opnås idet ratioen 
-$$r = 1 - 1/R_{0}$$ 
+$$r = 1 - frac{1}{R_{0}}$$ 
 har opnået immunitet. 
 Der medregnes derfor ikke overshoot ifht forventede indlæggelser.
 % skal overshoot uddybes her? skal det formuleres på anden vis?
@@ -63,9 +63,21 @@ Regnestykket går da ud på at se hvor mange indlæggelser der forventelgt vil f
 
 Ved hjælp fra SSIs vaccinedata, kan dette regnestykke er laves, dels for den enkelte aldersgruppe, dels for den samlede befolkning.
 
+\section*{Exponential model:}
+
+I denne model resgnes antallet af modtagelige i alle aldresgrupper for at være så relativt stor ifht antallet af inficerede der vil opstå på 
+
+\subsection*{Antagelser:}
+
 \section*{Resultater:}
 Resultaterne fra ovenstående model og SSI vaccinedata, illustreres og beskrives her som følger:
-
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{}
+\caption{
+\label{fig:}
+}
+\end{figure}
 
 
 %\appendix
