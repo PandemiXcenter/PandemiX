@@ -22,9 +22,9 @@ import math
 # Define paths
 rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
 
-path_data = rootdir_data + "ssi_data\\"
-path_dash = rootdir_data + "ssi_dashboard\\"
-path_vacc = rootdir_data + "ssi_vacc\\"
+path_data = rootdir_data + "ssi_data"
+path_dash = rootdir_data + "ssi_dashboard"
+path_vacc = rootdir_data + "ssi_vacc"
 
 # path_figs = os.getcwd() +"\\..\\Figures\\" 
 
@@ -73,7 +73,7 @@ for link in links[3:]:
     yearPos = file.find('2021')
     
     if yearPos == -1:
-        print("2021 not found in link; continues...")
+        # print("2021 not found in link; continues...")
         continue
 
     curDate = file[yearPos:yearPos+4] + '-' + file[yearPos-2:yearPos] + '-' + file[yearPos-4:yearPos-2] 
@@ -85,9 +85,10 @@ for link in links[3:]:
     if (curDatetime > mostRecentDate):
         print(curDatetime)
 
-        filename = "SSI_data_" + curDate
-        zipped_save_path = path_data + "_zipped/" + filename + ".zip"
-        extracted_save_path = path_data + "/" + filename
+        filename = "\\SSI_data_" + curDate
+        zipped_save_path = path_data + "_zipped" + filename + ".zip"
+        extracted_save_path = path_data  + filename
+        print(extracted_save_path)
 
         
         try:
@@ -130,7 +131,7 @@ for link in links[3:]:
     yearPos = file.find('2021')
     
     if yearPos == -1:
-        print("2021 not found in link; continues...")
+        # print("2021 not found in link; continues...")
         continue
     # print(yearPos)
     # print(file[yearPos-4:yearPos+4])
@@ -143,9 +144,10 @@ for link in links[3:]:
         print(curDatetime)
 
 
-        filename = "SSI_vacc_" + curDate
-        zipped_save_path = path_vacc + "_zipped/" + filename + ".zip"
-        extracted_save_path = path_vacc + "/" + filename
+        filename = "\\SSI_vacc_" + curDate
+        zipped_save_path = path_vacc + "_zipped" + filename + ".zip"
+        extracted_save_path = path_vacc + filename
+        print(extracted_save_path)
         
         try:
             download_url(file, zipped_save_path)
@@ -197,9 +199,9 @@ for link in links[1:]:
     if (curDatetime > mostRecentDate):
         print(curDatetime)
 
-        filename = "SSI_dashboard_" + curDate
-        zipped_save_path = path_dash + "_zipped/" + filename + ".zip"
-        extracted_save_path = path_dash + "/" + filename
+        filename = "\\SSI_dashboard_" + curDate
+        zipped_save_path = path_dash + "_zipped" + filename + ".zip"
+        extracted_save_path = path_dash + filename
         
         try:
             download_url(file, zipped_save_path)
@@ -207,3 +209,5 @@ for link in links[1:]:
                 zipObj.extractall(extracted_save_path)
         except: 
             print(file)
+
+# %%

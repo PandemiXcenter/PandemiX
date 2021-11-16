@@ -8,7 +8,7 @@ import seaborn as sns
 
 
 import matplotlib.pyplot as plt
-%matplotlib widget
+# %matplotlib widget
 plt.rcParams['figure.figsize'] = (12,8)
 plt.rcParams["image.cmap"] = "tab10"
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.tab10.colors)
@@ -23,7 +23,7 @@ parameters = {
                 'lines.linewidth': 3
              }
 plt.rcParams.update(parameters)
-%matplotlib widget
+# %matplotlib widget
 from matplotlib import cm # Colormaps
 import matplotlib.colors as colors
 # cmap = plt.cm.get_cmap('Dark2',len(ageGroups))
@@ -740,4 +740,4 @@ fig.tight_layout()
 # %%
 # dfVacc[dfVacc.Aldersgruppe == '12-15']
 
-
+print('Script done')
