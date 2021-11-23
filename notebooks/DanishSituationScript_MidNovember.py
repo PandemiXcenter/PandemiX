@@ -188,13 +188,13 @@ plt.tight_layout()
 plt.savefig(path_figs+'Cases_2020and2021')
 
 
-ax1.set_ylim(top=2500)
+# ax1.set_ylim(top=2500)
 ax1.set_xlim([np.datetime64('2021-06-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
 plt.savefig(path_figs+'Cases_2020and2021_zoom')
 
-ax1.set_ylim(top=4500)
+# ax1.set_ylim(top=4500)
 ax1.set_xlim([np.datetime64('2021-09-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
@@ -464,9 +464,9 @@ lastDate =  dfAdm.Dato.max() - np.timedelta64(1,'D')
 # lastDate =  np.datetime64('2021-11-01')
 
 dfAdm_slice = dfAdm[(dfAdm.Dato >= firstDate) & (dfAdm.Dato <= lastDate)]
-print(len(dfAdm_slice))
+# print(len(dfAdm_slice))
 dfCase_slice = dfCase[(dfCase.Date >= firstDate) & (dfCase.Date <= lastDate)]
-print(len(dfCase_slice))
+# print(len(dfCase_slice))
 # dfDea_slice = dfDea[(dfDea.Dato >= firstDate) & (dfDea.Dato <= lastDate)]
 # print(len(dfDea_slice))
 
@@ -554,11 +554,11 @@ firstDate = np.datetime64('2020-04-01')
 lastDate =  np.datetime64('2021-11-01')
 
 dfAdm_slice = dfAdm[(dfAdm.Dato >= firstDate) & (dfAdm.Dato <= lastDate)]
-print(len(dfAdm_slice))
+# print(len(dfAdm_slice))
 dfCase_slice = dfCase[(dfCase.Date >= firstDate) & (dfCase.Date <= lastDate)]
-print(len(dfCase_slice))
+# print(len(dfCase_slice))
 dfDea_slice = dfDea[(dfDea.Dato >= firstDate) & (dfDea.Dato <= lastDate)]
-print(len(dfDea_slice))
+# print(len(dfDea_slice))
 
 curDates =dfAdm_slice.Dato
 
@@ -739,5 +739,8 @@ fig.tight_layout()
 
 # %%
 # dfVacc[dfVacc.Aldersgruppe == '12-15']
+
+print(dfCase.tail(5))
+print(dfAdm.tail(5))
 
 print('Script done')
