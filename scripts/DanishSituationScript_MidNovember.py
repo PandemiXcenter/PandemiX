@@ -93,7 +93,7 @@ path_figs = os.getcwd() +"/../Figures/"
 #         curdf['Antal_testede'] = pd.to_numeric(curdf['Antal_testede'].astype(str).apply(lambda x: x.replace('.','')))
 #         curdf['Procent_positive'] = pd.to_numeric(curdf['Procent_positive'].astype(str).apply(lambda x: x.replace(',','.')))
         
-         dfCase.loc[latestDate] = curdf['Antal_bekræftede_COVID-19'].values
+#         dfCase.loc[latestDate] = curdf['Antal_bekræftede_COVID-19'].values
 #         dfTest.loc[latestDate] = curdf['Antal_testede'].values
 #         dfPosP.loc[latestDate] = curdf['Procent_positive'].values
 
@@ -115,7 +115,10 @@ path_figs = os.getcwd() +"/../Figures/"
 
 # %%
 
-latestsubdir = list(os.walk(path_data))[0][1][-1]
+allsubdirsSorted = list(os.walk(path_data))[0][1]
+allsubdirsSorted.sort()
+#latestsubdir = list(os.walk(path_data))[0][1][-1]
+latestsubdir = allsubdirsSorted[-1]
 latestdir = path_data + latestsubdir
 
 print(latestdir)
