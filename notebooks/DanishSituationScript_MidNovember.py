@@ -282,13 +282,13 @@ plt.tight_layout()
 plt.savefig(path_figs+'Testede_2020and2021')
 
 
-ax1.set_ylim(top=200000)
+# ax1.set_ylim(top=200000)
 ax1.set_xlim([np.datetime64('2021-06-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
 plt.savefig(path_figs+'Testede_2020and2021_zoom')
 
-ax1.set_ylim(top=200000)
+# ax1.set_ylim(top=200000)
 ax1.set_xlim([np.datetime64('2021-09-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
@@ -376,13 +376,13 @@ plt.tight_layout()
 plt.savefig(path_figs+'Deaths_2020and2021')
 
 
-ax1.set_ylim(top=10)
+ax1.set_ylim(top=20)
 ax1.set_xlim([np.datetime64('2021-06-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
 plt.savefig(path_figs+'Deaths_2020and2021_zoom')
 
-ax1.set_ylim(top=20)
+ax1.set_ylim(top=40)
 ax1.set_xlim([np.datetime64('2021-09-01'),np.datetime64('2022-01-01')])
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%B'))
 plt.tight_layout()
