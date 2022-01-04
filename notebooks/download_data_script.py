@@ -70,12 +70,13 @@ for link in links[3:]:
         continue
     # print(link)
     file = link["href"]
-    yearPos = file.find('2021')
+    # yearPos = file.find('2021')
+    yearPos = file.find('2022-')
     
     if yearPos == -1:
         # print("2021 not found in link; continues...")
         continue
-
+    # print(file)
     curDate = file[yearPos:yearPos+4] + '-' + file[yearPos-2:yearPos] + '-' + file[yearPos-4:yearPos-2] 
     
     # print(file)
@@ -128,7 +129,8 @@ for link in links[3:]:
         continue
     # print(link)
     file = link["href"]
-    yearPos = file.find('2021')
+    # yearPos = file.find('2021')
+    yearPos = file.find('2022-')
     
     if yearPos == -1:
         # print("2021 not found in link; continues...")
@@ -185,10 +187,11 @@ for link in links[1:]:
         # print("not a file; continues...")
         continue
     file = link["href"]
-    yearPos = file.find('2021')
+    # yearPos = file.find('2021')
+    yearPos = file.find('2022-')
     
     if yearPos == -1:
-        print("2021 not found in link; continues...")
+        # print("2021 not found in link; continues...")
         continue
     # print(yearPos)
     # print(file[yearPos-4:yearPos+4])
