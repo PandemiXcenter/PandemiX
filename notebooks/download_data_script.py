@@ -115,7 +115,8 @@ soup = BeautifulSoup(page.content, 'html.parser')
 links = soup.find_all("a", string=lambda text: "dash" in str(text).lower())
 # check_str = "<a href=\"https://files.ssi"
 check_str_dash = "<a href=\"https://files.ssi.dk/covid19/overvagning/dashboard/overvaagningsdata-dashboard-"
-for link in links[3:]: 
+# for link in links[3:]: 
+for link in links: 
     # print('---')
     # print(link)
     if str(link)[:len(check_str_dash)]!=check_str_dash:
@@ -196,8 +197,8 @@ for link in links[3:]:
     if download_all_data:
 
         filename = "\\SSI_vacc_" + curDate
-        zipped_save_path = path_dash + "_zipped" + filename + ".zip"
-        extracted_save_path = path_dash + filename
+        zipped_save_path = path_vacc + "_zipped" + filename + ".zip"
+        extracted_save_path = path_vacc + filename
         print(f'Downloading: {extracted_save_path}')
         
         try:
@@ -210,8 +211,8 @@ for link in links[3:]:
         if (curDateTime > mostRecentDate):
             
             filename = "\\SSI_vacc_" + curDate
-            zipped_save_path = path_dash + "_zipped" + filename + ".zip"
-            extracted_save_path = path_dash + filename
+            zipped_save_path = path_vacc + "_zipped" + filename + ".zip"
+            extracted_save_path = path_vacc + filename
             print(f'Downloading: {extracted_save_path}')
             
             try:
