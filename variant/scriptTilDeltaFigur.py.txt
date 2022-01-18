@@ -1,0 +1,78 @@
+import numpy as np
+import matplotlib.pyplot as plt
+# %matplotlib widget
+plt.rcParams['figure.figsize'] = (10,12)
+# plt.rcParams["image.cmap"] = "Dark2"
+# plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
+plt.rcParams["image.cmap"] = "tab10"
+plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.tab10.colors)
+fs_label = 16
+parameters = {
+                'axes.labelsize': fs_label,
+                'axes.titlesize': fs_label+4,
+                'xtick.labelsize': fs_label,
+                'ytick.labelsize': fs_label, 
+                'legend.fontsize': fs_label, 
+                'lines.markersize': 10,
+                'lines.linewidth': 3
+             }
+plt.rcParams.update(parameters)
+# %matplotlib widget  
+# plt.style.use('ggplot')
+import matplotlib.colors as colors
+# cmap = plt.cm.get_cmap('Dark2',len(ageGroups))
+from matplotlib import cm # Colormaps
+
+import locale
+import matplotlib.dates as mdates
+locale.setlocale(locale.LC_TIME,"Danish")
+
+curmax = 65
+curmax = 50
+tRange = np.arange(0,curmax)
+
+alpha1 = 0.95
+alpha2 = 1.1
+
+b1 = 50
+b2 = 0.25
+
+y1 = b1 * np.exp((alpha1-1) * tRange)
+y2 = b2 * np.exp((alpha2-1) * tRange)
+
+fig,ax = plt.subplots(figsize=(10,8))
+
+ax.plot(tRange,y1,'b',label='Alfa-variant',linewidth=5)
+ax.plot(tRange,y2,color='orangered',label='Delta-variant',linewidth=5)
+ax.plot(tRange,y1+y2,'k:',label='Total',linewidth=5)
+
+# ax.text(5,b1,f'$$\alpha$$')
+ax.text(3,b1*0.9,'Alfa',fontsize=26)
+ax.text(curmax-5,20,'Delta',fontsize=26)
+
+ax.legend(loc='upper right')
+
+ax.set_yticks([])
+ax.set_xticks([])
+# ax.set_yticklabels([])
+# ax.set_xticklabels([])
+
+
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
+ax.set_xlim(left=0,right=curmax)
+ax.set_ylim(bottom=0)
+
+
+ax.set_xlabel('Tid')
+ax.set_ylabel('Antal nye smittetilfælde')
+
+# make arrows
+ax.plot((1), (0), ls="", marker=">", ms=7, color="k",
+        transform=ax.get_yaxis_transform(), clip_on=False)
+ax.plot((0), (1), ls="", marker="^", ms=7, color="k",
+        transform=ax.get_xaxis_transform(), clip_on=False)
+
+plt.tight_layout()
+
+plt.savefig('figs/FraAlfaTilDelta')
