@@ -16,8 +16,19 @@ body {
 ### Hver for sig
 ![](../Figures/Agedistribution_CasesWeekly.png)
 
+### Relativt til størrelsen af befolkningsgruppen
+![](../Figures/Agedistribution_CasesWeeklyOnlyRatio.png)
+
+### Relativt til størrelsen af befolkningsgruppen, kumuleret
+![](../Figures/Agedistribution_CasesWeeklyByPopulationOnlyCumulative.png)
+
 ### Stacked
 ![](../Figures/Agedistribution_CasesWeeklyStacked.png)
+
+--- 
+
+## Nyindlagte, per 100.000 borgere i aldersgruppen
+![](../Figures/Agedistribution_IndlagteWeekly.png)
 
 ---
 
@@ -27,8 +38,3 @@ body {
 
 ### Stacked
 ![](../Figures/Agedistribution_TestedeWeeklyStacked.png)
-
----
-
-## Nyindlagte 
-![](../Figures/Agedistribution_IndlagteWeekly.png)
