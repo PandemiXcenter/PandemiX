@@ -32,7 +32,7 @@ body {
 
 ---
 
-## Nyindlage
+## Nyindlagte
 ![](../Figures/Regionalt/Nyindlagte.png)
 
 ---

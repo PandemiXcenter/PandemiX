@@ -27,6 +27,11 @@ body {
 
 --- 
 
+### Kumuleret, relativt til størrelsen af befolkningsgruppen, kun nylige tilfælde
+![](../Figures/Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecent.png)
+
+--- 
+
 ## Nyindlagte, per 100.000 borgere i aldersgruppen
 ![](../Figures/Agedistribution_IndlagteWeekly.png)
 
