@@ -14,32 +14,32 @@ body {
 
 ## Antal smittetilfælde
 ### Hver for sig
-![](../Figures/Agedistribution_CasesWeekly.png)
+![](../Figures/AgeDistribution/Agedistribution_CasesWeekly.png)
 
 ### Relativt til størrelsen af befolkningsgruppen
-![](../Figures/Agedistribution_CasesWeeklyOnlyRatio.png)
+![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyOnlyRatio.png)
 
 ### Relativt til størrelsen af befolkningsgruppen, kumuleret
-![](../Figures/Agedistribution_CasesWeeklyByPopulationOnlyCumulative.png)
+![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyByPopulationOnlyCumulative.png)
 
 ### Stacked
-![](../Figures/Agedistribution_CasesWeeklyStacked.png)
+![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyStacked.png)
 
 --- 
 
 ### Kumuleret, relativt til størrelsen af befolkningsgruppen, kun nylige tilfælde
-![](../Figures/Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecent.png)
+![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecent.png)
 
 --- 
 
 ## Nyindlagte, per 100.000 borgere i aldersgruppen
-![](../Figures/Agedistribution_IndlagteWeekly.png)
+![](../Figures/AgeDistribution/Agedistribution_IndlagteWeekly.png)
 
 ---
 
 ## Antal testede
 ### Hver for sig
-![](../Figures/Agedistribution_TestedeWeekly.png)
+![](../Figures/AgeDistribution/Agedistribution_TestedeWeekly.png)
 
 ### Stacked
-![](../Figures/Agedistribution_TestedeWeeklyStacked.png)
+![](../Figures/AgeDistribution/Agedistribution_TestedeWeeklyStacked.png)
