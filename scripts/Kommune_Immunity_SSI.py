@@ -19,10 +19,6 @@
 # # First, load various packages and set figure preferences
 
 # %%
-
-import matplotlib
-
-
 # Load packages and settings
 import numpy as np
 import pandas as pd
@@ -216,7 +212,7 @@ def getKommuneCount(curKommune):
 
 # %%
 
-def getProgressionMeasure(curDays,curCount):
+def getProgressionMeasureOld(curDays,curCount):
 
     # Difference between dates and the corresponding week-day the week before
     weekDiff = curCount[7:] - curCount[:-7]
@@ -233,6 +229,67 @@ def getProgressionMeasure(curDays,curCount):
     return rnTime(measureDays,7),rnMean(measure1,7)
 
 # getProgressionMeasure(curDays,curCount)
+
+# %%
+# Simplified progression measure:
+# Simply just the 7-day difference of the 7-day running mean
+def getProgressionMeasure(curDays,curCount):
+    
+    # Calculate the current running mean
+    curMean = rnMean(curCount,7)
+    measure1 = curMean[7:] - curMean[:-7]
+    measure1 = measure1/curMean[:-7]
+
+    # # Difference between dates and the corresponding week-day the week before
+    # weekDiff = curCount[7:] - curCount[:-7]
+
+    # # Measure 1: Weekly difference, relative to week before
+    # measure1 =  (weekDiff)/curCount[:-7]
+
+    # # Measure 2: Sign of relative difference, currently unused
+    # measure2 = np.sign(weekDiff)
+
+    # # Right-adjusted days
+    measureDays = curDays[7:]
+    measureDays = curDays[13:]
+
+    # return rnTime(measureDays,7),rnMean(measure1,7)
+    return measureDays,measure1
+
+# getProgressionMeasure(curDays,curCount)
+
+
+
+# %%
+curMean = rnMean(curCount,7) 
+curMean[-10:]
+
+measure1 = curMean[7:] - curMean[:-7]
+measure1 = measure1/curMean[:-7]
+measure1[-10:]
+
+# %%
+curDays,curCount,curPerc = getKommuneCount('Odense')
+measDays,curMeasure = getProgressionMeasure(curDays,curCount)
+measDaysOld,curMeasureOld = getProgressionMeasureOld(curDays,curCount)
+
+
+fig,(ax1,ax2) = plt.subplots(2,1,sharex=True)
+ax1.plot(curDays,curCount,'k.:',markersize=2,linewidth=0.5)
+ax1.plot(rnTime(curDays,7),rnMean(curCount,7),'k')
+ax2.plot(measDays,curMeasure,label='New measure')
+ax2.plot(measDaysOld,curMeasureOld,label='Old measure')
+
+ax1.set_ylim(bottom=0)
+ax2.set_ylim([-1,1])
+ax1.set_xlim(left=np.datetime64('2021-10-01'))
+
+ax2.legend() 
+ax1.grid()
+ax2.grid()
+
+# %%
+
 
 # %% [markdown]
 # # Make figures
@@ -362,22 +419,6 @@ gdf_meas['CurrentMeasure'] = np.clip(gdf_meas.CurrentMeasure.values,-1,1)
 
 # %%
 
-# def getProgressionMeasure(curDays,curCount):
-
-#     # Difference between dates and the corresponding week-day the week before
-#     weekDiff = curCount[7:] - curCount[:-7]
-
-#     # Measure 1: Weekly difference, relative to week before
-#     measure1 =  (weekDiff)/curCount[:-7]
-
-#     # Measure 2: Sign of relative difference, currently unused
-#     measure2 = np.sign(weekDiff)
-
-#     # Right-adjusted days
-#     measureDays = curDays[7:]
-
-#     return rnTime(measureDays,7),rnMean(measure1,7)
-
 kommunenavn = 'København'
 kommunenavn = 'Odense'
 curDays,curCount,curPerc = getKommuneCount(kommunenavn)
@@ -449,6 +490,81 @@ for i in range(6,-1,-1):
 curAvgVal = curAvgVal/7
 # ax1.text(np.datetime64('today')-np.timedelta64(1,'D'),curAvgVal,f'Sum: {7*rnMean(measure1,7)[-1]:0.2}',fontsize=20, weight='bold')
 ax1.text(np.datetime64('today')-np.timedelta64(1,'D'),curAvgVal,f'Sum: {100*7*rnMean(measure1,7)[-1]:3.0f}',fontsize=20, weight='bold')
+
+ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
+# ax1.plot(measureDays,weekDiff)
+leftDate = np.datetime64('2022-01-14')
+ax1.set_xlim(left=leftDate,right=np.datetime64('today')+np.timedelta64(4,'D'))
+ax1.set_ylim(bottom=1000)
+ax1.spines['right'].set_visible(False)
+ax1.spines['top'].set_visible(False)
+
+ax1.set_ylabel('Antal nye smittetilfælde')
+ax1.set_title(f'Eksempel på mål. Kommune: {kommunenavn}')
+
+if saveFigures:
+    plt.savefig(path_figs+f'MeasureExampleOld')
+
+# %%
+# curMeasure[-10:]
+curMean = rnMean(curCount,7) 
+curMean[-10:]
+
+measure1 = curMean[7:] - curMean[:-7]
+measure1 = measure1/curMean[:-7]
+measure1[-10:]
+
+# %%
+kommunenavn = 'København'
+kommunenavn = 'Odense'
+curDays,curCount,curPerc = getKommuneCount(kommunenavn)
+
+# Calculate the current running mean
+curMean = rnMean(curCount,7)
+measure1 = curMean[7:] - curMean[:-7]
+measure1 = measure1/curMean[:-7]
+measureDays = curDays[13:]
+
+# curMeasure = rnMean(measure1,7)
+# curMeasureDays = rnTime(measureDays,7)
+curMeasure = measure1
+curMeasureDays = measureDays
+    
+# weekDiff = curCount[7:] - curCount[:-7]
+
+# # Measure 1: Weekly difference, relative to week before
+# measure1 =  (weekDiff)/curCount[:-7]
+
+# # Measure 2: Sign of relative difference, currently unused
+# measure2 = np.sign(weekDiff)
+
+# # Right-adjusted days
+# measureDays = curDays[7:]
+
+fig,ax1 = plt.subplots(tight_layout=True)
+
+fig.patch.set_facecolor('xkcd:off white')
+ax1.set_facecolor('xkcd:off white')
+
+ax1.plot(curDays,curCount,'*:k',linewidth=1,markersize=10)
+ax1.plot(rnTime(curDays,7),rnMean(curCount,7),'k',linewidth=6)
+
+# Draw weekends
+firstSunday = np.datetime64('2021-10-03')
+numWeeks = 52
+for k in range(-numWeeks,numWeeks):
+        curSunday = firstSunday + np.timedelta64(7*k,'D')
+        ax1.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
+# ax1.grid(axis='y')
+
+NotYetShown_down = True
+NotYetShown_up = True
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.75)
+
+ax1.plot([curMeasureDays[-1],curMeasureDays[-8]]-np.timedelta64(3,'D'),[rnMean(curCount,7)[-1],rnMean(curCount,7)[-8]],'b.--',linewidth=6)
+
+curMeas = curMeasure[-1]
+ax1.text(curMeasureDays[-1]-np.timedelta64(3,'D'),rnMean(curCount,7)[-1]*1.2,f'{100*curMeas:+3.0f}%',fontsize=20,ha='center',bbox=props)
 
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
 # ax1.plot(measureDays,weekDiff)
@@ -547,34 +663,6 @@ for i in range(len(ExamplesToShow)):
     if saveFigures:
         plt.savefig(path_figs+f'ByEksempler_{kommunenavn}')
 
-# %%
-# # # gdf_meas.CurrentMeasure.values
-# # # np.clip(gdf_meas.CurrentMeasure.values,-1,1)
-
-# # gdf_meas["CurrentMeasure_Removed"] = gdf_meas.CurrentMeasure
-# # gdf_meas.loc[gdf_meas.navn=='Samsø Kommune',"CurrentMeasure_Removed"] = np.nan
-# # gdf_meas.loc[gdf_meas.navn=='Læsø Kommune',"CurrentMeasure_Removed"] = np.nan
-
-# # gdf_meas_noNaN = gdf_meas.dropna()
-# # # gdf_meas_noNaN
-# # gdf_meas[gdf_meas.CurrentMeasure.isna()]
-# # np.array(curPerc)[curDates >= firstDateToCount]
-# # curPerc
-# # curPerc[np.array(curDates) >= firstDateToCount]
-# curDays,curCount,curPerc = getKommuneCount(kommunenavn)
-# len(curPerc)
-# # len(curDates)
-
-# # curPerc
-# # curDates >= firstDateToCount
-# # curTotImmu
-
-# immuOnFirstDate = curPerc[curDays >= firstDateToCount][0]
-# immuOnFirstDate
-# curTotImmu = np.cumsum(curPerc)[-1] - immuOnFirstDate
-# curTotImmu
-# gdf_meas
-
 # %% [markdown]
 # # Second figure: Map of measure
 
@@ -654,7 +742,7 @@ fig.patch.set_facecolor('xkcd:beige')
 ax1.set_facecolor('xkcd:beige')
 
 vmin = 10
-vmax= 30
+vmax= 35
 dY = 2.5
 curYticks = np.arange(vmin,vmax+dY,dY)
 
@@ -695,21 +783,21 @@ cax.yaxis.tick_left()
 # cax.set_yticks(curYticks)
 # cax.set_yticklabels(curYtickLabels)
 
-cax.set_yticks(curYticks)
-# plt.show()
-newYticksLabels = [str(np.round(x,1)).replace('.',',') for x in curYticks]
-# print(newYticksLabels)
-cax.set_yticklabels(newYticksLabels)
-# cax.set_yticklabels(asdf)
-
-ax1.set_title('Naturlig immunitet fra Omikron smitte, samlet befolkning')
 cax.yaxis.set_label_position("left")
 cax.yaxis.tick_left()
+cax.set_yticks(curYticks)
+# plt.show()
+# newYticksLabels = [str(np.round(x,1)).replace('.',',') for x in curYticks]
+# # print(newYticksLabels)
+# cax.set_yticklabels(newYticksLabels)
+# # cax.set_yticklabels(asdf)
+
+ax1.set_title('Naturlig immunitet fra Omikron smitte, samlet befolkning')
 textFirstDate = pd.to_datetime(firstDateToCount).strftime('%#d. %B %Y')
 lastDateUsed = np.datetime64(latestsubdir[-10:])-np.timedelta64(1,'D')
 textLastDate = pd.to_datetime(lastDateUsed).strftime('%#d. %B %Y')
 cax.set_ylabel(f'Andel af befolkning smittet siden {textFirstDate} [%]')
-ax1.set_title(f'Andel af befolkning smittet i perioden {textFirstDate} til og med {textLastDate}\nBaseret på PCR-positive, ikke justeret for test-intensitet')
+ax1.set_title(f'Andel af befolkning smittet i perioden {textFirstDate} til og med {textLastDate}\nBaseret på PCR-positive, ikke justeret for test-intensitet eller mørketal')
 
 
 
@@ -717,144 +805,154 @@ if saveFigures:
     plt.savefig(path_figs+'KortImmunitet')
 
 
-# plt.show()
-
 # %% [markdown]
-# # Various tests, not used
+# # Maps, with credits/reference to source
 
 # %%
 
-# latestsubdir = list(os.walk(path_dash))[0][1][-1]
-# latestdir = path_dash + latestsubdir
-# latestdir
+fig,ax1 = plt.subplots(figsize=(15,15),tight_layout=True) 
 
-# dfAge = pd.read_csv(latestdir+'\\Regionalt_DB\\18_fnkt_alder_uge_testede_positive_nyindlagte.csv',delimiter=';',encoding='latin1',dtype=str)
-# dfAge['Nyindlagte pr. 100.000 borgere'] = pd.to_numeric(dfAge['Nyindlagte pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Positive pr. 100.000 borgere'] = pd.to_numeric(dfAge['Positive pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Testede pr. 100.000 borgere'] = pd.to_numeric(dfAge['Testede pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Antal testede'] = pd.to_numeric(dfAge['Antal testede'])
-# dfAge['Antal positive'] = pd.to_numeric(dfAge['Antal positive'])
+divider = make_axes_locatable(ax1)
+cax = divider.append_axes("left", size="5%", pad=0.01)
+# from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+# cax = inset_axes(ax1, width="30%", height="30%", loc=3) 
 
-# # dfAge.tail(18)
+fig.patch.set_facecolor('xkcd:beige')
+ax1.set_facecolor('xkcd:beige')
 
-# %%
-# # Calculate dates
-# import datetime
-# weekDTs = [np.datetime64(datetime.datetime.strptime(d[:4] + '-W'+d[6:8]+'-1', "%Y-W%W-%w")) for d in dfAge.Uge]
-# dfAge['Dato'] = weekDTs
-
-# # # Remove everything before 2021-01-01
-# # dfAge = dfAge[dfAge.Dato > np.datetime64('2020-12-31')]
-# dfAge.columns
-# dfAge.Aldersgruppe.unique()
-
-# %%
-# dfAge.columns
-# # dfAge
-
-# %%
-# df_total = df.groupby(['Aldersgruppe','Dagsdato']).sum()
-
-# plt.figure()
-# plt.plot(df_total.loc['0-2'].index,df_total.loc['0-2','Bekræftede tilfælde'],'*:')
-# # plt.plot(df_total.loc['0-2'].index,df_total.loc['0-2','Bekræftede tilfælde'].diff())
-# # plt.plot(rnTime(df_total.loc['0-2'].index,7),rnMean(df_total.loc['0-2','Bekræftede tilfælde'].diff(),7))
-# plt.plot(df_total.loc['20-39'].index,df_total.loc['20-39','Bekræftede tilfælde'],'*:')
-
-# curdfAge = dfAge[dfAge.Aldersgruppe == '00-02']
-# plt.plot(curdfAge.Dato,np.cumsum(curdfAge['Antal positive']),'o-')
-# # plt.plot(curdfAge.Dato,curdfAge['Antal positive'],'.')
-
-# curdfAge = dfAge[dfAge.Aldersgruppe == '20-39']
-# plt.plot(curdfAge.Dato,np.cumsum(curdfAge['Antal positive']),'o-')
-
-# plt.xlim(left=np.datetime64('2021-10-01'))
-
-# allAges = df.Aldersgruppe.unique()[:-1] # An agegroup called "." was sometimes included?
-# allAges
-# # df_07
-
-# %%
-# # Get data of age-specific cases
-# latestsubdir = list(os.walk(path_dash))[0][1][-1]
-# latestdir = path_dash + latestsubdir
-# latestdir
-
-# dfAge = pd.read_csv(latestdir+'\\Regionalt_DB\\18_fnkt_alder_uge_testede_positive_nyindlagte.csv',delimiter=';',encoding='latin1',dtype=str)
-# dfAge['Nyindlagte pr. 100.000 borgere'] = pd.to_numeric(dfAge['Nyindlagte pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Positive pr. 100.000 borgere'] = pd.to_numeric(dfAge['Positive pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Testede pr. 100.000 borgere'] = pd.to_numeric(dfAge['Testede pr. 100.000 borgere'].str.replace(',','.'))
-# dfAge['Antal testede'] = pd.to_numeric(dfAge['Antal testede'])
-# dfAge['Antal positive'] = pd.to_numeric(dfAge['Antal positive'])
-
-# dfAge.tail(18)
+vmin = -0.5
+vmax = 0.5
+# vmin=-1
+# vmax=1
 
 
-# %%
-# # df_07.tail()
-# # # df_07[df_07.Kommune == 101]
-# # Municipality data, totals
-# latestsubdir = list(os.walk(path_dash))[0][1][-1]
-# latestdir = path_dash + latestsubdir
-# df_07 = pd.read_csv(latestdir+'/Kommunalt_DB/07_bekraeftede_tilfaelde_pr_dag_pr_kommune.csv',encoding='latin1',delimiter = ';')
+# cmap = plt.cm.get_cmap('seismic')
+# cmap = colors.LinearSegmentedColormap.from_list("", ["xkcd:blue","xkcd:light gray","xkcd:dark red"],N=13)
+cmap = colors.LinearSegmentedColormap.from_list("", ["xkcd:blue","xkcd:light blue","xkcd:light gray","xkcd:red","xkcd:dark red"],N=11)
+# gdf_meas.plot(ax=ax1,column = 'CurrentMeasure',cmap=cmap,legend=True, cax=cax)
+gdf_meas.plot(  ax=ax1,
+                column = 'CurrentMeasure',
+                cmap=cmap,
+                vmin=vmin,
+                vmax=vmax,
+                edgecolor="black",
+                linewidth=0.2,
+                legend=True,
+                # legend_kwds={'loc': 'lower right'},
+                # legend_kwds={'loc': 'lower right'},
+                cax=cax
+                )
 
-# df_07['Dato'] = pd.to_datetime(df_07['Dato'])
+                
+
+# Remove axes
+ax1.set_xticks([])
+ax1.set_yticks([])
+ax1.spines['right'].set_visible(False)
+ax1.spines['top'].set_visible(False)
+ax1.spines['left'].set_visible(False)
+ax1.spines['bottom'].set_visible(False)
+
+cax.yaxis.set_label_position("left")
+cax.yaxis.tick_left()
+# cax.set_yticks([])
+
+# curYticks = [-1,-5/11,0,5/11,1]
+curYticks = np.array([-1,-5/11,0,5/11,1])*vmax
+# curYtickLabels = ['Stort fald','Fald','Uændret','Stigning','Stor stigning']
+curYtickLabels = ['Stort\nfald','Fald','Uændret','Stigning','Stor\nstigning']
+cax.set_yticks(curYticks)
+cax.set_yticklabels(curYtickLabels)
+
+txt2 = 'Rasmus Kristoffer Pedersen, PandemiX Center, Roskilde Universitet.\nSmitteudvikling bestemt ud fra relativ ændring i 7-dages gennemsnit af smittetilfælde. Ikke justeret for test-intensitet eller mørketal.\nData fra SSI overvågningsdata, dashboard-fil. Filnavn: /Kommunalt_DB/07_bekraeftede_tilfaelde_pr_dag_pr_kommune.csv.'
+ax1.text(0.75, 0,txt2,
+     horizontalalignment='right',
+     verticalalignment='bottom',
+     transform = ax1.transAxes,
+     fontsize=7)
+     
+if saveFigures:
+    plt.savefig(path_figs+'KortSmitteudvikling_MedKilde')
+
 
 # %%
 
-# plt.figure()
-# curdf = asdf.loc[101]
-# plt.plot(curdf.index,curdf['Bekræftede tilfælde'])
+fig,ax1 = plt.subplots(figsize=(15,15),tight_layout=True) 
 
-# curdf1 = df_07[df_07.Kommune == 101]
+divider = make_axes_locatable(ax1)
+cax = divider.append_axes("left", size="5%", pad=0.01)
+# from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+# cax = inset_axes(ax1, width="30%", height="30%", loc=3) 
 
-# plt.plot(curdf1.Dato,np.cumsum(curdf1['Bekræftede tilfælde']))
-# # plt.plot(rnTime(curdf1.Dato,7),rnMean(curdf1['Bekræftede tilfælde'],7))
-# # df[df.Kommune == 101]
+fig.patch.set_facecolor('xkcd:beige')
+ax1.set_facecolor('xkcd:beige')
 
-# plt.xlim(left=np.datetime64('2021-10-01'))
+vmin = 10
+vmax= 35
+dY = 2.5
+curYticks = np.arange(vmin,vmax+dY,dY)
 
-# %%
-# df_07
-# asdf = df.groupby(['Kommune','Dagsdato']).sum()
+# cmap = plt.cm.get_cmap('seismic')
+# cmap = colors.LinearSegmentedColormap.from_list("", ["xkcd:blue","xkcd:light gray","xkcd:dark red"],N=13)
+# cmap = colors.LinearSegmentedColormap.from_list("", ["xkcd:blue","xkcd:light blue","xkcd:light gray","xkcd:red","xkcd:dark red"],N=11)
+cmap = colors.LinearSegmentedColormap.from_list("", ["xkcd:purple","xkcd:light gray","xkcd:orange"],N=len(curYticks)-1)
+# gdf_meas.plot(ax=ax1,column = 'CurrentMeasure',cmap=cmap,legend=True, cax=cax)
+gdf_meas.plot(  ax=ax1,
+                column = 'TotalImmunity',
+                cmap=cmap,
+                vmin=vmin,
+                vmax=vmax,
+                edgecolor="black",
+                linewidth=0.2,
+                legend=True,
+                # legend_kwds={'loc': 'lower right'},
+                # legend_kwds={'loc': 'lower right'},
+                cax=cax
+                )
 
-# asdf.loc[101]
+                
 
-# plt.figure()
-# curdf = asdf.loc[101]
-# plt.plot(curdf.index,curdf['Bekræftede tilfælde'].diff(),'b.:',linewidth=1)
-# plt.plot(rnTime(curdf.index,7),rnMean(curdf['Bekræftede tilfælde'].diff(),7),'b')
+# Remove axes
+ax1.set_xticks([])
+ax1.set_yticks([])
+ax1.spines['right'].set_visible(False)
+ax1.spines['top'].set_visible(False)
+ax1.spines['left'].set_visible(False)
+ax1.spines['bottom'].set_visible(False)
 
-# curdf1 = df_07[df_07.Kommune == 101]
+cax.yaxis.set_label_position("left")
+cax.yaxis.tick_left()
+# cax.set_yticks([])
 
-# plt.plot(curdf1.Dato,curdf1['Bekræftede tilfælde'],'r.:',linewidth=1)
-# plt.plot(rnTime(curdf1.Dato,7),rnMean(curdf1['Bekræftede tilfælde'],7),'r')
-# # df[df.Kommune == 101]
+# curYticks = [-1,-5/11,0,5/11,1]
+# curYtickLabels = ['Stort fald','Fald','Uændret','Stigning','Stor stigning']
+# cax.set_yticks(curYticks)
+# cax.set_yticklabels(curYtickLabels)
 
-# plt.xlim(left=np.datetime64('2021-10-01'))
+cax.yaxis.set_label_position("left")
+cax.yaxis.tick_left()
+cax.set_yticks(curYticks)
+# plt.show()
+# newYticksLabels = [str(np.round(x,1)).replace('.',',') for x in curYticks]
+# # print(newYticksLabels)
+# cax.set_yticklabels(newYticksLabels)
+# # cax.set_yticklabels(asdf)
 
-# %%
-# df.tail()
-# df.groupby('Dagsdato').sum()
-
-# %%
-# plt.figure()
-# curdf = df_07.groupby('Dato').sum()
-
-# # plt.plot(curdf.index,curdf['Bekræftede tilfælde'])
-# plt.plot(curdf.index,np.cumsum(curdf['Bekræftede tilfælde']))
-
-# curdf1 = df.groupby('Dagsdato').sum()
-# plt.plot(curdf1.index,curdf1['Bekræftede tilfælde'],':')
-
-# plt.xlim(left=np.datetime64('2021-10-01'))
-
-# %%
-
-
-plt.close('all')
-
+ax1.set_title('Naturlig immunitet fra Omikron smitte, samlet befolkning')
+textFirstDate = pd.to_datetime(firstDateToCount).strftime('%#d. %B %Y')
+lastDateUsed = np.datetime64(latestsubdir[-10:])-np.timedelta64(1,'D')
+textLastDate = pd.to_datetime(lastDateUsed).strftime('%#d. %B %Y')
+cax.set_ylabel(f'Andel af befolkning smittet siden {textFirstDate} [%]')
+ax1.set_title(f'Andel af befolkning smittet i perioden {textFirstDate} til og med {textLastDate}\nBaseret på PCR-positive, ikke justeret for test-intensitet eller mørketal')
 
 
+txt2 = 'Rasmus Kristoffer Pedersen, PandemiX Center, Roskilde Universitet.\nData fra SSI overvågningsdata, dashboard-fil. Filnavn: /Kommunalt_DB/07_bekraeftede_tilfaelde_pr_dag_pr_kommune.csv. Befolkningstal: Danmark Statistik 2021-tal'
+ax1.text(0.75, 0,txt2,
+     horizontalalignment='right',
+     verticalalignment='bottom',
+     transform = ax1.transAxes,
+     fontsize=7)
+     
 
-print('Finished making all figures')
+if saveFigures:
+    plt.savefig(path_figs+'KortImmunitet_MedKilde')
