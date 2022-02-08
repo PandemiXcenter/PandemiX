@@ -60,6 +60,7 @@ path_dash = rootdir_data + "ssi_dashboard\\"
 path_vacc = rootdir_data + "ssi_vacc\\"
 
 path_figs = os.getcwd() +"\\..\\Figures\\" 
+path_figs = path_figs + "VinterSammenligning\\"
 
 # %%
 latestsubdir = list(os.walk(path_data))[0][1][-1]

@@ -260,13 +260,13 @@ def getProgressionMeasure(curDays,curCount):
 
 
 
-# %%
-curMean = rnMean(curCount,7) 
-curMean[-10:]
+# # %%
+# curMean = rnMean(curCount,7) 
+# curMean[-10:]
 
-measure1 = curMean[7:] - curMean[:-7]
-measure1 = measure1/curMean[:-7]
-measure1[-10:]
+# measure1 = curMean[7:] - curMean[:-7]
+# measure1 = measure1/curMean[:-7]
+# measure1[-10:]
 
 # %%
 curDays,curCount,curPerc = getKommuneCount('Odense')
