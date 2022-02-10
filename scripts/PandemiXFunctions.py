@@ -1,8 +1,20 @@
+# Collection of various functions to use in various PandemiX work, for easy access
+
+# To import, file-directory can be temporarily added to path.
+# (Adding permanently to path is also an option, but this is more portable)
+# import sys
+# sys.path.append("./../scripts")
+# import PandemiXFunctions
+
 import math
 import numpy as np
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+
+
+# ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
+# ax1.spines['top'].set_visible(False) 
 
 # Define paths
 rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
@@ -17,8 +29,8 @@ def rnMean(data,meanWidth):
     return np.convolve(data, np.ones(meanWidth)/meanWidth, mode='valid')
 def rnTime(t,meanWidth):
     return t[math.floor(meanWidth/2):-math.ceil(meanWidth/2)+1]
-def plotMean(xVals,yVals,ax=plt.gca(),meanWidth=7, **kwargs):
-
+def plotMean(xVals,yVals,ax,meanWidth=7, **kwargs):
+    
     line2d_1 = ax.plot(xVals,yVals,'.:',linewidth=0.5,markersize=2, **kwargs)
     line2d_2 = ax.plot(rnTime(xVals,meanWidth),rnMean(yVals,meanWidth),**kwargs)
 
