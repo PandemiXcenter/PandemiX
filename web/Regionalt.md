@@ -36,11 +36,11 @@ body {
 ![](../Figures/Regionalt/Nyindlagte.png)
 
 ---
-
+<!-- 
 ## Dødsfald
 ![](../Figures/Regionalt/Deaths.png)
 
----
+--- -->
 
 ## Hovedstaden, kumuleret
 ![](../Figures/Regionalt/HovedstadenKumulativtNovemberTilNu.png)
