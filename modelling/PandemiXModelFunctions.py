@@ -6,7 +6,7 @@ from copy import copy
 import matplotlib.pyplot as plt
 
 ## Various basic systems of differential equations
-def SIRmodel(t,x,beta,gamma):
+def SIRModel(t,x,beta,gamma):
     # Standard SIR model.
     # Reduced form: Population (S+I+R) should be 1 
     # 'R' is omitted from equations
@@ -17,10 +17,10 @@ def SIRmodel(t,x,beta,gamma):
     dI =   beta * S * I - gamma * I
 
     return [dS,dI]
-def SIRmodelMeta():
+def SIRModelMeta():
     return ['S','I'],['beta','gamma']
 
-def SIHRmodel(t,x,beta,gamma,r_chr,u_H):
+def SIHRModel(t,x,beta,gamma,r_chr,u_H):
     # Expansion of SIR model to have hospitalizations as well
     
     # Note that it should not be necessary to actually use this model 
@@ -36,11 +36,11 @@ def SIHRmodel(t,x,beta,gamma,r_chr,u_H):
     dH = gamma * r_chr * I  - u_H * H 
 
     return [dS,dI,dH]
-def SIHRmodelMeta():
+def SIHRModelMeta():
     return ['S','I','H'],['beta','gamma','r_chr','u_H']
     
 # Simple model with two diseases with complete cross-immunity
-def SIYRmodel(t,x,beta_I,gamma_I,beta_Y,gamma_Y):
+def SIYRModel(t,x,beta_I,gamma_I,beta_Y,gamma_Y):
 
     S,I,Y = x
 
@@ -49,17 +49,11 @@ def SIYRmodel(t,x,beta_I,gamma_I,beta_Y,gamma_Y):
     dY =   beta_Y * S * Y - gamma_Y * Y
 
     return [dS,dI,dY]
-def SIYRmodelMeta():
+def SIYRModelMeta():
     return ['S','I','Y'],['beta_I','gamma_I','beta_Y','gamma_Y']
     
-    
-# Uvaccinerede smittede med Omikron: Kun immunitet mod Omikron
-# Vaccinerede smittede med Omikron: Immunitet mod Omikron og andre 
-# @Tuliodna på twitter
-
-
 # Two diseases with one-way cross-immunity and one-variant vaccination
-def SVIYRRmodel(t,x,beta_I,gamma_I,beta_YS,beta_YV,beta_YR,gamma_Y):
+def SVIYRRModel(t,x,beta_I,gamma_I,beta_YS,beta_YV,beta_YR,gamma_Y):
     
     # R_Y is 1-all
 
@@ -72,18 +66,70 @@ def SVIYRRmodel(t,x,beta_I,gamma_I,beta_YS,beta_YV,beta_YR,gamma_Y):
     dRI =  gamma_I * I - beta_YR * R_I * Y 
 
     return [dS,dV,dI,dY,dRI]
-def SVIYRRmodelMeta():
+def SVIYRRModelMeta():
     return ['S','V','I','Y','R_I'],['beta_I','gamma_I','beta_YS','beta_YV','beta_YR','gamma_Y']
+   
+def OmikronDeltaFullModel(t,x,beta_IS_S,beta_IV_S,beta_I01_S,beta_IS_V,beta_IV_V,beta_I01_V,beta_IS_R01,beta_IV_R01,beta_I01_R01,beta_Y_S,beta_Y10_S,beta_Y_R10,beta_Y10_R10,gamma_IS,gamma_IV,gamma_Y,gamma_I01,gamma_Y10):
+    # Full model describing a suggested behaviour for Omikron and Delta development.
+    # Based on the idea that Omikron can infect both vaccinated and unvaccinated, 
+    # but Delta (or similar variant) can infect omikron-recovered and unvaccinated. 
+    # I.e. "Unvaccinated -> Omikron -> Recovered" only provides protection against Omikron, not delta
     
+    # Uvaccinerede smittede med Omikron: Kun immunitet mod Omikron
+    # Vaccinerede smittede med Omikron: Immunitet mod Omikron og andre 
+    # @Tuliodna på twitter
+    
+    # Variables: 
+    # S: Susceptible (Unvaccinated)
+    # V: Vaccinated
+    # IS:  Omikron-infected, unvaccinated
+    # IV:  Omikron-infected, vaccinated
+    # I01: Omikron-infected, Delta-recovered
+    # Y:   Delta-infected, (unvaccinated)
+    # Y10: Delta-infected, Omikron-recovered
+    # R01: Delta-recovered
+    # R10: Omikron-recovered
+    # R11: Both-recovered
+    
+    # Parameters:
+    # beta_x_y: Rate of transmission from group x to group y
+    # gamma_y: Rate of recovery from group y
+    # (While beta_x_y1 would probably be similar to beta_x_y2, this implementation allows for different rates)
+    # beta_IS_S,beta_IV_S,beta_I01_S,beta_IS_V,beta_IV_V,beta_I01_V,beta_IS_R01,beta_IV_R01,beta_I01_R01,beta_Y_S,beta_Y10_S,beta_Y_R10,beta_Y10_R10,gamma_IS,gamma_IV,gamma_Y,gamma_I01,gamma_Y10 = P
+    
+    S,V,IS,IV,Y,R01,R10,I01,Y10 = x 
+    
+    dS   = - (beta_IS_S * IS + beta_IV_S * IV + beta_I01_S * I01 + beta_Y_S * Y + beta_Y10_S * Y10) * S
+    dV   = - (beta_IS_V * IS + beta_IV_V * IV + beta_I01_V * I01) * V
+    dIS  =   (beta_IS_S * IS + beta_IV_S * IV + beta_I01_S * I01) * S               - gamma_IS * IS 
+    dIV  =   (beta_IS_V * IS + beta_IV_V * IV + beta_I01_V * I01) * V               - gamma_IV * IV
+    dY   =   (beta_Y_S * Y + beta_Y10_S * Y10) * S                                  - gamma_Y * Y 
+    dR01 = - (beta_IS_R01 * IS + beta_IV_R01 * IV + beta_I01_R01 * I01) * R01       + gamma_Y  * Y  
+    dR10 = - (beta_Y_R10 * Y + beta_Y10_R10 * Y10) * R10                            + gamma_IS * IS
+    dI01 =   (beta_IS_R01 * IS + beta_IV_R01 * IV + beta_I01_R01 * I01) * R01       - gamma_I01 * I01 
+    dY10 =   (beta_Y_R10 * Y + beta_Y10_R10 * Y10) * R10                            - gamma_Y10 * Y10
+    # dR11 = gamma_IV * IV + gamma_I01 * I01 + gamma_Y10 * Y10
+    
+    return [dS,dV,dIS,dIV,dY,dR01,dR10,dI01,dY10]   
+    
+def OmikronDeltaFullModelMeta():
+    
+    varsMeta = ['S','V','IS','IV','Y','R01','R10','I01','Y10']
+    parsMeta = ['beta_IS_S','beta_IV_S','beta_I01_S','beta_IS_V','beta_IV_V','beta_I01_V','beta_IS_R01','beta_IV_R01','beta_I01_R01','beta_Y_S','beta_Y10_S','beta_Y_R10','beta_Y10_R10','gamma_IS','gamma_IV','gamma_Y','gamma_I01','gamma_Y10']
+
+    return varsMeta,parsMeta
+ 
 def getModel(ModelName = 'SIR'):
     if (ModelName == 'SIR'):
-        return SIRmodel,SIRmodelMeta()
+        return SIRModel,SIRModelMeta()
     elif (ModelName == 'SIHR'):
-        return SIHRmodel,SIHRmodelMeta()
+        return SIHRModel,SIHRModelMeta()
     elif (ModelName == 'SIYR'):
-        return SIYRmodel,SIYRmodelMeta()
+        return SIYRModel,SIYRModelMeta()
     elif (ModelName == 'SVIYRR'):
-        return SVIYRRmodel,SVIYRRmodelMeta()
+        return SVIYRRModel,SVIYRRModelMeta()
+    elif (ModelName == 'OmikronDeltaFull'):
+        return OmikronDeltaFullModel,OmikronDeltaFullModelMeta()
         
 def DictToArray(curDict,dictMeta):
     curArray =[]
@@ -92,8 +138,8 @@ def DictToArray(curDict,dictMeta):
     return curArray
     
 ## Helper functions
-# def simulateModel(ModelFunction=SIRmodel,TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
-# def simulateModel(ModelFunction=SIRmodel,TimeRange=np.linspace(0,10,100),InitialConditions=[0.99,0.01],Parameters=[2/7,1/7]):
+# def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
+# def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions=[0.99,0.01],Parameters=[2/7,1/7]):
 def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
     
     ModelFunction,ModelMeta = getModel(ModelName)
@@ -240,23 +286,24 @@ class Scheme:
             self.Changes = newChanges
     
     def simulate(self,tRes=100):
+        
+        _,ModelMeta = getModel(self.ModelName)
+        VarsMeta,ParsMeta = ModelMeta
         # If there are no changes, simply simulate
         if (len(self.Changes) == 0):
-            tRange = np.linspace(self.tStart,self.tEnd,tRes)
-            simulationOutput = simulateModel(self.ModelName,TimeRange=tRange,InitialConditions=self.InitialConditions,Parameters=self.Parameters)
+            totT = np.linspace(self.tStart,self.tEnd,tRes)
+            totResult = simulateModel(self.ModelName,TimeRange=totT,InitialConditions=self.InitialConditions,Parameters=self.Parameters)
             
-            # Add simulation to object
-            self.result = type('SimulationResult', (), {})()
-            self.result.t = tRange
-            self.result.y = simulationOutput
+            # # Add simulation to object
+            # self.result = type('SimulationResult', (), {})()
+            # self.result.t = tRange
+            # self.result.y = simulationOutput
         # If there are changes, simply go through them
         # (Assuming they are in correct order. Changes should be ordered using sortChanges())
         else:
             tInit = self.tStart
             curInit = self.InitialConditions.copy()
             curPars = self.Parameters.copy()
-            _,ModelMeta = getModel(self.ModelName)
-            VarsMeta,ParsMeta = ModelMeta
             
             # For each change, run until the change time
             for i in range(len(self.Changes)):
@@ -332,10 +379,14 @@ class Scheme:
             totT = np.append(totT,curT)                    
             totResult = np.concatenate([totResult,simulationOutput],axis=1)
             
-            # Add results to object
-            self.result = type('SimulationResult', (), {})()
-            self.result.t = totT
-            self.result.y = totResult
+        # Add results to object
+        self.result = type('SimulationResult', (), {})()
+        self.result.t = totT
+        self.result.y = totResult
+        # Add results as individual attributes
+        for i in range(len(VarsMeta)):
+            curName = VarsMeta[i] 
+            setattr(self.result,curName,totResult[i,:])
             
     def plot(self,fig=[],linestyle='-',color='k',showChanges=True,describeChanges=True):
         
