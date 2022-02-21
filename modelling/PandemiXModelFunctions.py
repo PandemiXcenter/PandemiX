@@ -131,16 +131,33 @@ def getModel(ModelName = 'SIR'):
     elif (ModelName == 'OmikronDeltaFull'):
         return OmikronDeltaFullModel,OmikronDeltaFullModelMeta()
         
-def DictToArray(curDict,dictMeta):
+def getAvailableModels():
+    return ['SIR','SIHR','SIYR','SVIYRR','OmikronDeltaFull']
+        
+def DictToArray(curDict,dictMeta,DefaultValues):
     curArray =[]
-    for i in range(len(curDict)):
-        curArray.append(curDict[dictMeta[i]]) 
+    # If all variables/parameters are mentioned in dict, 
+    # length should be the same, so assume order is correct
+    if (len(curDict) == len(dictMeta)):
+        for i in range(len(curDict)):
+            curArray.append(curDict[dictMeta[i]]) 
+    else:
+        # Go through each name
+        for i in range(len(dictMeta)):
+            curStr = dictMeta[i]
+            # If the name is in the dict, append the values
+            if curStr in curDict:
+                curArray.append(curDict[curStr])
+            # Otherwise, append zero
+            else:
+                curArray.append(DefaultValues[i])
     return curArray
     
 ## Helper functions
 # def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
 # def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions=[0.99,0.01],Parameters=[2/7,1/7]):
-def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
+# def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
+def simulateModel(ModelName,TimeRange,InitialConditions,Parameters):
     
     ModelFunction,ModelMeta = getModel(ModelName)
     VarsMeta,ParsMeta = ModelMeta
@@ -153,7 +170,11 @@ def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditi
         # InitArray =[]
         # for i in range(len(InitialConditions)):
         #     InitArray.append(InitialConditions[VarsMeta[i]]) 
-        InitArray = DictToArray(InitialConditions,VarsMeta)
+        # InitArray = DictToArray(InitialConditions,VarsMeta)
+        
+        # If any values are missing, they will be set to 0
+        InitArray = DictToArray(InitialConditions,VarsMeta,np.zeros(len(VarsMeta)))
+        # InitArray = DictToArray(InitialConditions,VarsMeta,np.ones(len(VarsMeta)))
     else: 
         InitArray = InitialConditions
         
@@ -162,7 +183,10 @@ def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditi
         # ParsArray =[]
         # for i in range(len(Parameters)):
         #     ParsArray.append(Parameters[ParsMeta[i]]) 
-        ParsArray = DictToArray(Parameters,ParsMeta)
+        # ParsArray = DictToArray(Parameters,ParsMeta)
+        
+        # If any values are missing, they will be set to 1
+        ParsArray = DictToArray(Parameters,ParsMeta,np.ones(len(ParsMeta)))
     else: 
         ParsArray = Parameters
         
@@ -229,7 +253,7 @@ class Change:
         
     
 class Scheme:
-    def __init__(self,ModelName,InitialConditions,Parameters,tStart,tEnd,Changes=[]):
+    def __init__(self,ModelName,InitialConditions,Parameters,tStart,tEnd,Changes=None):
         self.ModelName = ModelName
         self.InitialConditions = InitialConditions
         self.Parameters = Parameters
@@ -240,7 +264,10 @@ class Scheme:
         # self.Model,self.ModelMeta = getModel(ModelName)
         
         # Initialize changes
-        self.Changes = Changes
+        if (Changes == None):
+            self.Changes = []
+        else: 
+            self.Changes = Changes
         
     def __str__(self):
         curStr = '-------'
@@ -254,7 +281,6 @@ class Scheme:
             for i in range(len(self.Changes)):
                 curCha = self.Changes[i]
                 curStr += f'\nChange {i}: {self.Changes[i].getStringDescription()}'
-                # curStr += f'\nAt time {curCha.t}...'
                 
             curStr += '\n---'
         return curStr
@@ -309,7 +335,7 @@ class Scheme:
             for i in range(len(self.Changes)):
                 curChange = self.Changes[i]
                 
-                curT = np.linspace(tInit,curChange.t,tRes) # TODO: Flag for time-resolution?. DONE: Flag is tRes
+                curT = np.linspace(tInit,curChange.t,tRes) 
                 
                 # Run period
                 simulationOutput = simulateModel(self.ModelName,TimeRange=curT,InitialConditions=curInit,Parameters=curPars)
@@ -321,13 +347,22 @@ class Scheme:
                 #     finalState = finalState + DictToArray(curChange.AddVariables,VarsMeta)
                 if (len(curChange.AddVariables) > 0):
                     if (type(curChange.AddVariables) == dict):
-                        finalState = finalState + DictToArray(curChange.AddVariables,VarsMeta) 
+                        # finalState = finalState + DictToArray(curChange.AddVariables,VarsMeta) 
+                        
+                        # If any values are missing, they will be set to zero
+                        VarsArray = DictToArray(curChange.AddVariables,VarsMeta,np.zeros(len(VarsMeta)))
+                        
+                        finalState = finalState + VarsArray
+                        
                     else:
                         finalState = finalState + curChange.AddVariables
                 # Multiply variables
                 if (len(curChange.MultiplyVariables) > 0):
                     if (type(curChange.MultiplyVariables) == dict):
-                        toMult = DictToArray(curChange.MultiplyVariables,VarsMeta) 
+                        # toMult = DictToArray(curChange.MultiplyVariables,VarsMeta) 
+                        
+                        # If any values are missing, they will be set to one
+                        toMult = DictToArray(curChange.MultiplyVariables,VarsMeta,np.ones(len(VarsMeta)))
                     else:
                         toMult = curChange.MultiplyVariables
                     for j in range(len(finalState)):
@@ -335,19 +370,35 @@ class Scheme:
                         
                 # Add to parameters
                 if (len(curChange.AddParameters) > 0):
-                    if (type(curChange.AddParameters) == dict):
-                        curPars = curPars + DictToArray(curChange.AddParameters,ParsMeta) 
+                    if (type(curPars) == dict):
+                        # for key in curPars:
+                        for key in curChange.AddParameters:
+                            curPars[key] = curPars[key] + curChange.AddParameters[key]
                     else:
-                        curPars = curPars + curChange.AddParameters
+                        
+                        if (type(curChange.AddParameters) == dict):
+                            # curPars = curPars + DictToArray(curChange.AddParameters,ParsMeta) 
+                            # If any values are missing, they will be set to zero
+                            toAdd = DictToArray(curChange.AddParameters,ParsMeta,np.zeros(len(ParsMeta)))
+                            # curPars = curPars + curArray
+                        else: # If a list of values
+                            toAdd = curChange.AddParameters
+                            # curPars = curPars + curChange.AddParameters
+                        for j in range(len(curPars)):
+                            curPars[j] = curPars[j] + toAdd[j]
                 # Multiply Parameters
                 if (len(curChange.MultiplyParameters) > 0):
                     if (type(curChange.MultiplyParameters) == dict):
-                        toMult = DictToArray(curChange.MultiplyParameters,ParsMeta) 
+                        # toMult = DictToArray(curChange.MultiplyParameters,ParsMeta) 
+                        
+                        # If any values are missing, they will be set to one
+                        toMult = DictToArray(curChange.MultiplyParameters,ParsMeta,np.ones(len(ParsMeta)))
                     else:
                         toMult = curChange.MultiplyParameters
                     
                     if (type(curPars) == dict):
-                        for key in curPars:
+                        # for key in curPars:
+                        for key in curChange.MultiplyParameters:
                             curPars[key] = curPars[key] * curChange.MultiplyParameters[key]
                     else:
                         for j in range(len(curPars)):
@@ -454,3 +505,39 @@ class Scheme:
             # fig.tight_layout()
         
         return fig,allAxes
+        
+    def simulateAndReturnResults(self):
+        self.simulate()
+        return self.result
+        
+    # Helper functions for returning callable function
+    def setDictAndSimulate(self,dictToChange,valToChange,value):
+        dictToChange[valToChange] = value 
+        return self.simulateAndReturnResults()
+    def setInitAndSimulate(self,strToChange,value):
+        # varsMeta,parsMeta = getModel(self.ModelName)[1]
+        if strToChange in self.InitialConditions:
+            self.InitialConditions[strToChange] = value 
+        if strToChange in self.Parameters:
+            self.Parameters[strToChange] = value 
+        return self.simulateAndReturnResults()
+        
+        
+    
+    def getCallableFunction(self,toOptimize):
+        # So far, only one parameter can be changed at a time, and full result-object is returned
+        
+        # If toOptimize is a string, it should refer to a initial condition or a starting parameter
+        if (type(toOptimize) == str):
+            funcToReturn = lambda x: self.setInitAndSimulate(toOptimize,x)
+            return funcToReturn
+        else:
+            # If toOptimize is not a string, it assumed to be a list, ordered like so: 
+            # 0: Which "Change" number to change something in. 
+            # 1: Name of the Change-Dict 
+            # 2: Name of the variable or parameter to change
+            changeToOptimize = getattr(self,'Changes')[toOptimize[0]]
+            dictToOptimize = getattr(changeToOptimize,toOptimize[1])
+            
+            funcToReturn = lambda x: self.setDictAndSimulate(dictToOptimize,toOptimize[2],x)
+            return funcToReturn
