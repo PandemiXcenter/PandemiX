@@ -1,4 +1,5 @@
 # %%
+# %matplotlib widget
 # Load packages and settings
 import numpy as np
 import pandas as pd
@@ -115,6 +116,9 @@ meanWidth = 7
 # %%
 # latestsubdir = list(os.walk(path_dash))[0][1][-1]
 # list(os.walk(path_dash))[0][1][-1]
+# dfReinfFile
+# dfReinfFile['Type af tilfælde (reinfektion eller første infektion)']
+# dfReinfFile
 
 # %%
 latestsubdir = list(os.walk(path_dash))[0][1][-1]
@@ -123,8 +127,10 @@ latestdir = path_dash + latestsubdir
 dfReinfFile = pd.read_csv(latestdir+'/Regionalt_DB/24_reinfektioner_daglig_region.csv',encoding='latin1',delimiter = ';')
 dfReinfFile['Prøvedato'] = pd.to_datetime(dfReinfFile['Prøvedato'])
 # groupdf = df.groupby(['Prøvedato').sum()
-df_reinf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller bekræftet tilfælde)'] == '1.Reinfektion'].groupby('Prøvedato').sum()
-df_inf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller bekræftet tilfælde)'] != '1.Reinfektion'].groupby('Prøvedato').sum()
+# df_reinf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller bekræftet tilfælde)'] == '1.Reinfektion'].groupby('Prøvedato').sum()
+# df_inf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller bekræftet tilfælde)'] != '1.Reinfektion'].groupby('Prøvedato').sum()
+df_reinf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller første infektion)'] == '1.Reinfektion'].groupby('Prøvedato').sum()
+df_inf = dfReinfFile[dfReinfFile['Type af tilfælde (reinfektion eller første infektion)'] != '1.Reinfektion'].groupby('Prøvedato').sum()
 
 # %% [markdown]
 # # Load data from "noegletal" file
@@ -165,6 +171,13 @@ dfKeysArray[-1]['Bekræftede tilfælde i alt siden sidste opdatering']
 dfKey.columns
 
 # %%
+
+thisCase = dfKeysArray[k-1]['Bekræftede tilfælde siden sidste opdatering'][0]
+dfKeysArray[1]
+# thisNewAdm = dfKeysArray[k]['Nyindlæggelser siden sidste opdatering'][0]
+# thisDeath = dfKeysArray[k]['Dødsfald siden sidste opdatering'][0]
+
+# %%
 # Make arrays to plot
 keyDates = dfKey.IndberetningDato
 keyDatesShift = keyDates + np.timedelta64(365,'D')
@@ -193,7 +206,8 @@ keyCaseReInf = keyCase * np.nan
 # After which the new names are used
 for k in range(1,len(dfKeysArray)):
     thisDate = dfKeysArray[k].Dato[0]
-    thisCase = dfKeysArray[k]['Bekræftede tilfælde siden sidste opdatering'][0]
+    # thisCase = dfKeysArray[k]['Bekræftede tilfælde siden sidste opdatering'][0]
+    thisCase = dfKeysArray[k]['Bekræftede tilfælde i alt siden sidste opdatering'][0]
     thisNewAdm = dfKeysArray[k]['Nyindlæggelser siden sidste opdatering'][0]
     thisDeath = dfKeysArray[k]['Dødsfald siden sidste opdatering'][0]
     thisAdm = dfKeysArray[k]['Indlæggelser i dag'][0]
@@ -439,6 +453,7 @@ ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'m',label='Nye tilfælde')
 curData = dataReIn[keyDates > firstDate]
 ax.plot(plotDates,curData,'b.:',linewidth=0.5,markersize=2)
 ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'b',label='Reinfektioner')
+# ax.plot(dfKeyFull.Date,dfKeyFull.Cases_Reinfection,label='Reinfections, noegletal-file')
 
 curData = dataNew[keyDates > firstDate].values + dataReIn[keyDates > firstDate].values
 ax.plot(plotDates,curData,'k.:',linewidth=0.5,markersize=2)
@@ -447,7 +462,7 @@ ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'k',label='Samlet')
 
 # Draw weekends
 firstSunday = np.datetime64('2021-10-03')
-numWeeks = 20
+numWeeks = 50
 for k in range(-numWeeks,numWeeks):
     curSunday = firstSunday + np.timedelta64(7*k,'D')
     ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
@@ -474,7 +489,7 @@ for k in range(1,len(allAxes.flatten())):
 
     # Draw weekends
     firstSunday = np.datetime64('2021-10-03')
-    numWeeks = 20
+    numWeeks = 50
     for k in range(-numWeeks,numWeeks):
         curSunday = firstSunday + np.timedelta64(7*k,'D')
         ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
@@ -490,6 +505,103 @@ if saveFigures:
     plt.savefig(path_figs+'CurrentStatus/AlleNoegletal')
 
 
+
+# %%
+keyDates = dfKeyFull.Date
+
+
+# colsToShow = ['Antal nye bekræftede tilfælde','Antal nye indlæggelser','Antal indlagte i dag med COVID','Antal indlagt i dag på intensiv','Antal indlagt i dag og i respirator','Antal nye døde']
+colsToShow = ['New_Admissions','Hospitalizations','ICU','Respirator','Deaths']
+labelsToUse = ['Nye indlæggelser','Hospitalsbelægning','Indlagte på intensiv','Indlagte i respirator','Dødsfald']
+filenames = ['NewAdmissions','CurrentAdmissions','ICU','Respirator','Deaths']
+
+firstDate = np.datetime64('2021-10-25')
+# firstDate = np.datetime64('2021-11-25')
+
+mw = 7
+
+# fig,allAxes = plt.subplots(3,2,figsize=(12,12),sharex=True,tight_layout=True)
+fig,ax = plt.subplots(1,1,figsize=(12,6),tight_layout=True)
+
+# Manually show re-infections and new infections
+# ax = allAxes[0,0]
+dataNew = dfKeyFull['Cases_New']
+dataReIn = dfKeyFull['Cases_Reinfection']
+
+plotDates = keyDates[keyDates > firstDate]
+curData = dataNew[keyDates > firstDate]
+ax.plot(plotDates,curData,'m.:',linewidth=0.5,markersize=2)
+ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'m',label='Nye tilfælde')
+
+curData = dataReIn[keyDates > firstDate]
+ax.plot(plotDates,curData,'b.:',linewidth=0.5,markersize=2)
+ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'b',label='Reinfektioner')
+# ax.plot(dfKeyFull.Date,dfKeyFull.Cases_Reinfection,label='Reinfections, noegletal-file')
+
+curData = dataNew[keyDates > firstDate].values + dataReIn[keyDates > firstDate].values
+ax.plot(plotDates,curData,'k.:',linewidth=0.5,markersize=2)
+ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'k',label='Samlet')
+
+
+# Draw weekends
+firstSunday = np.datetime64('2021-10-03')
+numWeeks = 50
+for k in range(-numWeeks,numWeeks):
+    curSunday = firstSunday + np.timedelta64(7*k,'D')
+    ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
+ax.grid(axis='y')
+
+
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
+ax.set_xlim(left=firstDate+np.timedelta64(int(np.ceil(mw/2)),'D'))
+ax.set_xlim(right=np.datetime64('today')+np.timedelta64(7,'D'))
+
+ax.set_ylim(bottom=0)
+ax.set_ylabel('Smittetilfælde',fontsize=14)
+ax.legend()
+
+
+if saveFigures:
+    plt.savefig(path_figs+'CurrentStatus/Cases')
+
+
+# for k in range(1,len(allAxes.flatten())):
+for k in range(1,6):
+    fig,ax = plt.subplots(1,1,figsize=(12,6),tight_layout=True)
+    # ax = allAxes.flatten()[k]
+    curCol = colsToShow[k-1]
+    curLabel = labelsToUse[k-1]
+
+    curData = dfKeyFull[curCol]
+    plotDates = keyDates[keyDates > firstDate]
+    curData = curData[keyDates > firstDate]
+    ax.plot(plotDates,curData,'k.:',linewidth=0.5,markersize=2)
+    ax.plot(rnTime(plotDates,mw),rnMean(curData,mw),'k')
+
+    ax.set_ylim(bottom=0)
+    ax.set_ylabel(curLabel,fontsize=14)
+
+    # Draw weekends
+    firstSunday = np.datetime64('2021-10-03')
+    numWeeks = 50
+    for w in range(-numWeeks,numWeeks):
+        curSunday = firstSunday + np.timedelta64(7*w,'D')
+        ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(w==0)*'Weekend')
+    ax.grid(axis='y')
+
+    
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
+    ax.set_xlim(left=firstDate+np.timedelta64(int(np.ceil(mw/2)),'D'))
+    ax.set_xlim(right=np.datetime64('today')+np.timedelta64(7,'D'))
+
+
+    if saveFigures:
+        plt.savefig(path_figs+'CurrentStatus/'+filenames[k-1])
+
+
+
+# %%
+# filenames[k]
 
 # %%
 # keyDates = dfKey.IndberetningDato
@@ -659,7 +771,11 @@ max2021Adms = np.max(rnMean(Adms2021,meanWidth))
 # ax1.plot(allDatesAdmShift,allAdms,'k.:',markersize=4,linewidth=0.5,label='2020/2021')
 # ax1.plot(rnTime(allDatesAdmShift,meanWidth),rnMean(allAdms,meanWidth),'k',label=f'2020/2021, {meanWidth} day running mean')
 # ax1.plot(allDatesAdm,100*allAdms/max2021Adms,'r.:',markersize=4,linewidth=0.5,label='Indlæggelser')
-ax1.plot(rnTime(allDatesAdm,meanWidth),100*rnMean(allAdms,meanWidth)/max2021Adms,'xkcd:orange',label=f'Hospital admissions, {meanWidth} day running mean')
+# ax1.plot(rnTime(allDatesAdm,meanWidth),100*rnMean(allAdms,meanWidth)/max2021Adms,'xkcd:orange',label=f'Hospital admissions, {meanWidth} day running mean')
+curDates = rnTime(allDatesAdm,meanWidth)
+curCount = 100*rnMean(allAdms,meanWidth)/max2021Adms
+ax1.plot(curDates[:-4],curCount[:-4],'xkcd:orange',label=f'Hospital admissions, {meanWidth} day running mean')
+ax1.plot(curDates[-5:],curCount[-5:],'xkcd:orange',linestyle=':',linewidth=2)
 
 
 # allAdms = keyAdmInt.Total.values
@@ -673,7 +789,12 @@ max2021AdmsInts = np.max(rnMean(keyAdmInt,meanWidth))
 # ax1.plot(allDatesAdmShift,allAdms,'k.:',markersize=4,linewidth=0.5,label='2020/2021')
 # ax1.plot(rnTime(allDatesAdmShift,meanWidth),rnMean(allAdms,meanWidth),'k',label=f'2020/2021, {meanWidth} day running mean')
 # ax1.plot(allDatesAdm,100*allAdms/max2021Adms,'r.:',markersize=4,linewidth=0.5,label='Indlæggelser')
-ax1.plot(rnTime(keyDates,meanWidth),100*rnMean(allAdmsInt,meanWidth)/max2021AdmsInts,'xkcd:violet',label=f'ICU admissions, {meanWidth} day running mean')
+# ax1.plot(rnTime(keyDates,meanWidth),100*rnMean(allAdmsInt,meanWidth)/max2021AdmsInts,'xkcd:violet',label=f'ICU admissions, {meanWidth} day running mean')
+curDates = rnTime(keyDates,meanWidth)
+curCount = 100*rnMean(allAdmsInt,meanWidth)/max2021AdmsInts
+# ax1.plot(curDates[-4:],curCount[-4:],'xkcd:violet',linestyle='--')
+# ax1.plot(curDates[:-4],curCount[:-4],'xkcd:violet',label=f'ICU admissions, {meanWidth} day running mean')
+ax1.plot(curDates,curCount,'xkcd:violet',label=f'ICU admissions, {meanWidth} day running mean')
 
 
 # allAdms = keyAdmInt.Total.values
@@ -682,7 +803,12 @@ Dea2021Int = allDeas2[allDatesDea < np.datetime64('2021-03-01')]
 max2021DeaInts = np.max(rnMean(allDeas,meanWidth))
 
 # ax1.plot(rnTime(allDatesDeaShift[:-1],meanWidth),rnMean(allDeas[:-1],meanWidth),'k',label=f'2020/2021, {meanWidth} dages gennemsnit')
-ax1.plot(rnTime(allDatesDea,meanWidth),100*rnMean(allDeas2,meanWidth)/max2021DeaInts,'r--',label=f'Deaths, {meanWidth} day running mean')
+# ax1.plot(rnTime(allDatesDea,meanWidth),100*rnMean(allDeas2,meanWidth)/max2021DeaInts,'r',label=f'Deaths, {meanWidth} day running mean')
+curDates = rnTime(allDatesDea,meanWidth)
+curCount = 100*rnMean(allDeas2,meanWidth)/max2021DeaInts
+ax1.plot(curDates[:-4],curCount[:-4],'r',label=f'Deaths, {meanWidth} day running mean')
+ax1.plot(curDates[-5:],curCount[-5:],'r',linestyle=':',linewidth=2)
+
 
 
 # ax1.plot(allDatesShift,allCases,'k.:',markersize=4,linewidth=0.5,label='2020/2021')
@@ -702,19 +828,26 @@ ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 ax1.spines['top'].set_visible(False) 
 ax1.spines['right'].set_visible(False)
 
-
-# if saveFigures:
-#     plt.savefig(path_figs+'CasesHospCompare_English2')
+if saveFigures:
+    plt.savefig(path_figs+'CurrentStatus/CompareWithMax_Full')
+#     plt.savefig(path_figs+'CurrentStatus/CasesHospCompare_English2')
 
 # maxAvg = np.max(rnMean(allCases,meanWidth))
 # ax1.set_ylim(top=maxAvg*1.1)
 
-firstDate = np.datetime64('2021-10-01')
+firstDate = np.datetime64('2021-11-01')
 ax1.set_xlim([firstDate,lastDate])
 
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%B'))
+if saveFigures:
+    plt.savefig(path_figs+'CurrentStatus/CompareWithMax')
+    
+ax1.set_ylim(top=np.max(100*rnMean(allAdms,meanWidth)/max2021Adms)*1.2)
+    
+if saveFigures:
+    plt.savefig(path_figs+'CurrentStatus/CompareWithMax_zoom')
 # if saveFigures:
-#     plt.savefig(path_figs+'CasesHospCompare_English2_zoom')
+#     plt.savefig(path_figs+'CurrentStatus/CasesHospCompare_English2_zoom')
 
 # %% [markdown]
 # # Naive forward-estimation of cases
