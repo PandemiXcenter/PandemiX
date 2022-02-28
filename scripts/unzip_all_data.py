@@ -5,7 +5,7 @@ import io
 import os
 
 # Define paths
-rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
+rootdir_data = os.getcwd() +"/../DanskeData/" 
 
 path_data = rootdir_data + "ssi_data"
 path_dash = rootdir_data + "ssi_dashboard"
@@ -18,7 +18,7 @@ curFiles = os.listdir(curRoot+'_zipped')
 
 for thisFile in curFiles:
 
-    filename = "\\" + thisFile[:-4]
+    filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
     extracted_save_path = curRoot  + filename
     # print(f'Extracting: {extracted_save_path}')
@@ -34,7 +34,7 @@ curFiles = os.listdir(curRoot+'_zipped')
 
 for thisFile in curFiles:
 
-    filename = "\\" + thisFile[:-4]
+    filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
     extracted_save_path = curRoot  + filename
     # print(f'Extracting: {extracted_save_path}')
@@ -50,7 +50,7 @@ curFiles = os.listdir(curRoot+'_zipped')
 
 for thisFile in curFiles:
 
-    filename = "\\" + thisFile[:-4]
+    filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
     extracted_save_path = curRoot  + filename
     # print(f'Extracting: {extracted_save_path}')

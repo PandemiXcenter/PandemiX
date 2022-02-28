@@ -24,7 +24,7 @@ print(f'Download all data: {download_all_data}')
 
 # %%
 # Define paths
-rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
+rootdir_data = os.getcwd() +"/../DanskeData/" 
 
 path_data = rootdir_data + "ssi_data"
 path_dash = rootdir_data + "ssi_dashboard"
@@ -78,7 +78,7 @@ for link in links[3:]:
     
     if download_all_data:
 
-        filename = "\\SSI_data_" + curDate
+        filename = "/SSI_data_" + curDate
         zipped_save_path = path_data + "_zipped" + filename + ".zip"
         extracted_save_path = path_data  + filename
         print(f'Downloading: {extracted_save_path}')
@@ -92,7 +92,7 @@ for link in links[3:]:
     else:
         if (curDateTime > mostRecentDate):
             
-            filename = "\\SSI_data_" + curDate
+            filename = "/SSI_data_" + curDate
             zipped_save_path = path_data + "_zipped" + filename + ".zip"
             extracted_save_path = path_data  + filename
             print(f'Downloading: {extracted_save_path}')
@@ -138,7 +138,7 @@ for link in links:
     
     if download_all_data:
 
-        filename = "\\SSI_dashboard_" + curDate
+        filename = "/SSI_dashboard_" + curDate
         zipped_save_path = path_dash + "_zipped" + filename + ".zip"
         extracted_save_path = path_dash + filename
         print(f'Downloading: {extracted_save_path}')
@@ -152,7 +152,7 @@ for link in links:
     else:
         if (curDateTime > mostRecentDate):
             
-            filename = "\\SSI_dashboard_" + curDate
+            filename = "/SSI_dashboard_" + curDate
             zipped_save_path = path_dash + "_zipped" + filename + ".zip"
             extracted_save_path = path_dash + filename
             print(f'Downloading: {extracted_save_path}')
@@ -196,7 +196,7 @@ for link in links[3:]:
     
     if download_all_data:
 
-        filename = "\\SSI_vacc_" + curDate
+        filename = "/SSI_vacc_" + curDate
         zipped_save_path = path_vacc + "_zipped" + filename + ".zip"
         extracted_save_path = path_vacc + filename
         print(f'Downloading: {extracted_save_path}')
@@ -210,7 +210,7 @@ for link in links[3:]:
     else:
         if (curDateTime > mostRecentDate):
             
-            filename = "\\SSI_vacc_" + curDate
+            filename = "/SSI_vacc_" + curDate
             zipped_save_path = path_vacc + "_zipped" + filename + ".zip"
             extracted_save_path = path_vacc + filename
             print(f'Downloading: {extracted_save_path}')
