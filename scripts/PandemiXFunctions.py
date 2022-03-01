@@ -25,9 +25,9 @@ path_vacc = rootdir_data + "ssi_vacc\\"
 
 path_figs = os.getcwd() +"\\..\\Figures\\" 
 
-def rnMean(data,meanWidth):
+def rnMean(data,meanWidth=7):
     return np.convolve(data, np.ones(meanWidth)/meanWidth, mode='valid')
-def rnTime(t,meanWidth):
+def rnTime(t,meanWidth=7):
     return t[math.floor(meanWidth/2):-math.ceil(meanWidth/2)+1]
 def plotMean(xVals,yVals,ax,meanWidth=7, **kwargs):
     

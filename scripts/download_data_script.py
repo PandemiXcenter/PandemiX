@@ -17,8 +17,8 @@ import datetime as dt
 import math
 
 # ----------------------- FLAG FOR DOWNLOADING ALL DATA -----------------------
-#download_all_data = False
-download_all_data = True
+download_all_data = False
+# download_all_data = True
 print(f'Download all data: {download_all_data}')
 # -----------------------------------------------------------------------------
 
