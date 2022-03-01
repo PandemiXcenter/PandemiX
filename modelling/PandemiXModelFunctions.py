@@ -4,7 +4,29 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from copy import copy
 import matplotlib.pyplot as plt
-
+       
+def DictToArray(curDict,dictMeta,DefaultValues):
+    curArray =[]
+    # If all variables/parameters are mentioned in dict, 
+    # length should be the same, so assume order is correct
+    if (len(curDict) == len(dictMeta)):
+        for i in range(len(curDict)):
+            curArray.append(curDict[dictMeta[i]]) 
+    else:
+        # Go through each name
+        for i in range(len(dictMeta)):
+            curStr = dictMeta[i]
+            # If the name is in the dict, append the values
+            if curStr in curDict:
+                curArray.append(curDict[curStr])
+            # Otherwise, append zero
+            else:
+                if (type(DefaultValues) == dict):
+                    curArray.append(DefaultValues[curStr])
+                else:
+                    curArray.append(DefaultValues[i])
+    return curArray
+    
 ## Various basic systems of differential equations
 def SIRModel(t,x,beta,gamma):
     # Standard SIR model.
@@ -120,47 +142,114 @@ def OmikronDeltaFullModelMeta():
     return varsMeta,parsMeta
  
 def getModel(ModelName = 'SIR'):
-    if (ModelName == 'SIR'):
-        return SIRModel,SIRModelMeta()
-    elif (ModelName == 'SIHR'):
-        return SIHRModel,SIHRModelMeta()
-    elif (ModelName == 'SIYR'):
-        return SIYRModel,SIYRModelMeta()
-    elif (ModelName == 'SVIYRR'):
-        return SVIYRRModel,SVIYRRModelMeta()
-    elif (ModelName == 'OmikronDeltaFull'):
-        return OmikronDeltaFullModel,OmikronDeltaFullModelMeta()
-        
+    # if (ModelName == 'SIR'):
+    #     return SIRModel,SIRModelMeta()
+    # elif (ModelName == 'SIHR'):
+    #     return SIHRModel,SIHRModelMeta()
+    # elif (ModelName == 'SIYR'):
+    #     return SIYRModel,SIYRModelMeta()
+    # elif (ModelName == 'SVIYRR'):
+    #     return SVIYRRModel,SVIYRRModelMeta()
+    # elif (ModelName == 'OmikronDeltaFull'):
+    #     return OmikronDeltaFullModel,OmikronDeltaFullModelMeta()
+    
+    if (type(ModelName) == str):
+        if (ModelName == 'SIR'):
+            return SIRModel,SIRModelMeta()
+        elif (ModelName == 'SIHR'):
+            return SIHRModel,SIHRModelMeta()
+        elif (ModelName == 'SIYR'):
+            return SIYRModel,SIYRModelMeta()
+        elif (ModelName == 'SVIYRR'):
+            return SVIYRRModel,SVIYRRModelMeta()
+        elif (ModelName == 'OmikronDeltaFull'):
+            return OmikronDeltaFullModel,OmikronDeltaFullModelMeta()
+    else: 
+        # ModelFunction = lambda t,x,*args: ArbitraryFunctionCall(t,x,*args,*ModelName)
+        ModelFlow,VarsMeta,ParsMeta = ModelName 
+        # ModelFunction = lambda t,x,*args: ModelCallFromMeta(t,x,*args,ModelMeta=ModelFlow)
+        ModelFunction = lambda t,x,*args: ArbitraryFunctionCall(t,x,args,ModelFlow,VarsMeta,ParsMeta)
+
+        return ModelFunction,(VarsMeta,ParsMeta)
+         
+   
+    # if (type(ModelFlowAndMeta) == str):
+    #     ModelFunction,ModelMeta = getModel(ModelFlowAndMeta)
+    #     VarsMeta,ParsMeta = ModelMeta
+    # else: 
+    #     ModelFunction = lambda t,x,*args: ArbitraryFunctionCall(t,x,*args,*ModelFlowAndMeta)
+    #     # ModelFlow,VarsMeta,ParsMeta = ModelFlowAndMeta
+    #     # ModelFunction = lambda t,x,*args: ModelCallFromMeta(t,x,*args,ModelMeta=ModelFlow)
+         
 def getAvailableModels():
     return ['SIR','SIHR','SIYR','SVIYRR','OmikronDeltaFull']
+
+## Arbitrary function definitions
+def ArbitraryFunctionCall(t,x,ps,modelFlows,varsMeta,parsMeta):
+
+    # Go through variable names and get inputs
+    for i in range(len(varsMeta)):
+        vName = varsMeta[i]
+        exec(vName+' = x['+str(i)+']')
         
-def DictToArray(curDict,dictMeta,DefaultValues):
-    curArray =[]
-    # If all variables/parameters are mentioned in dict, 
-    # length should be the same, so assume order is correct
-    if (len(curDict) == len(dictMeta)):
-        for i in range(len(curDict)):
-            curArray.append(curDict[dictMeta[i]]) 
-    else:
-        # Go through each name
-        for i in range(len(dictMeta)):
-            curStr = dictMeta[i]
-            # If the name is in the dict, append the values
-            if curStr in curDict:
-                curArray.append(curDict[curStr])
-            # Otherwise, append zero
-            else:
-                curArray.append(DefaultValues[i])
-    return curArray
-    
+    # Go through parameter names and save
+    for i in range(len(parsMeta)):
+        pName = parsMeta[i]
+        exec(pName+' = ps['+str(i)+']')
+
+    # Calculate the value of each current flow
+    allFlows = np.zeros(len(modelFlows))
+    i = 0
+    for key in modelFlows:
+        allFlows[i] = eval(key)
+        i = i + 1
+
+    # Initialize outputs as zero
+    dxdt = np.zeros(x.shape)
+    # Go through each variable
+    for i in range(len(varsMeta)):
+        # # Make sure the current output is zero
+        # dxdt[i] = 0
+        # Get the name of the current variable
+        curVarName = varsMeta[i]
+        # Go through each flow
+        for j in range(len(modelFlows)):
+            # Get the current flow
+            curFlow = list(modelFlows.items())[j]
+            # Identify inputs and outputs
+            curOut = curFlow[1][0]
+            curIn = curFlow[1][1]
+            # If the flow is an output of the current variable, subtract the flow-value
+            if (curOut == curVarName):
+                dxdt[i] -= allFlows[j]
+            # If the flow is an input of the current variable, add the flow-value
+            if (curIn == curVarName):
+                dxdt[i] += allFlows[j]
+
+    return dxdt
+
+# # Make a shorter function call for use in solve_ivp
+# def ModelCallFromMeta(t,x,*args,ModelMeta):
+#     modelFlows,varsMeta,parsMeta = ModelMeta
+#     return ArbitraryFunctionCall(t,x,args,modelFlows,varsMeta,parsMeta)
+
 ## Helper functions
 # def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
 # def simulateModel(ModelFunction=SIRModel,TimeRange=np.linspace(0,10,100),InitialConditions=[0.99,0.01],Parameters=[2/7,1/7]):
 # def simulateModel(ModelName='SIR',TimeRange=np.linspace(0,10,100),InitialConditions={'S0':0.99,'I0':0.01},Parameters={'beta': 0.5,'gamma': 1/7}):
-def simulateModel(ModelName,TimeRange,InitialConditions,Parameters):
+# def simulateModel(ModelName,TimeRange,InitialConditions,Parameters):
+def simulateModel(ModelFlowAndMeta,TimeRange,InitialConditions,Parameters):
     
-    ModelFunction,ModelMeta = getModel(ModelName)
+    ModelFunction,ModelMeta = getModel(ModelFlowAndMeta)
     VarsMeta,ParsMeta = ModelMeta
+
+    # if (type(ModelFlowAndMeta) == str):
+    #     ModelFunction,ModelMeta = getModel(ModelFlowAndMeta)
+    #     VarsMeta,ParsMeta = ModelMeta
+    # else: 
+    #     ModelFunction = lambda t,x,*args: ArbitraryFunctionCall(t,x,*args,*ModelFlowAndMeta)
+    #     # ModelFlow,VarsMeta,ParsMeta = ModelFlowAndMeta
+    #     # ModelFunction = lambda t,x,*args: ModelCallFromMeta(t,x,*args,ModelMeta=ModelFlow)
     
     t0 = TimeRange[0]
     tEnd = TimeRange[-1]
@@ -208,12 +297,14 @@ def prettyDict(curDict):
     
 ## Simulation schemes
 class Change:
-    def __init__(self,tChange,AddVariables = [],MultiplyVariables = [],AddParameters = [],MultiplyParameters = []):
+    def __init__(self,tChange,AddVariables = [],MultiplyVariables = [],SetVariables = [],AddParameters = [],MultiplyParameters = [],SetParameters = []):
         self.t = tChange 
         self.AddVariables = AddVariables
         self.MultiplyVariables = MultiplyVariables
+        self.SetVariables = SetVariables
         self.AddParameters = AddParameters
         self.MultiplyParameters = MultiplyParameters
+        self.SetParameters = SetParameters
         
     def __str__(self):
         return self.getStringDescription()
@@ -231,6 +322,13 @@ class Change:
                 curStr += f'multiply variables {prettyDict(self.MultiplyVariables)}, '
             else:
                 curStr += f'multiply variables {self.MultiplyVariables}, '
+                
+        if (len(self.SetVariables) > 0):
+            if type(self.SetVariables) == dict:
+                curStr += f'set variables {prettyDict(self.SetVariables)}, '
+            else:
+                curStr += f'set variables {self.SetVariables}, '
+
         if (len(self.AddParameters) > 0):
             if type(self.AddParameters) == dict:
                 curStr += f'add {prettyDict(self.AddParameters)} to parameters, '
@@ -241,12 +339,18 @@ class Change:
                 curStr += f'multiply parameters {prettyDict(self.MultiplyParameters)}, '
             else:
                 curStr += f'multiply parameters {self.MultiplyParameters}, '
+                
+        if (len(self.SetParameters) > 0):
+            if type(self.SetParameters) == dict:
+                curStr += f'set parameters {prettyDict(self.SetParameters)}, '
+            else:
+                curStr += f'set parameters {self.SetParameters}, '
         # Remove excess comma and space
         curStr = curStr[:-2]
         return curStr 
     
     def __copy__(self):
-        return type(self)(self.t,self.AddVariables,self.MultiplyVariables,self.AddParameters,self.MultiplyParameters)
+        return type(self)(self.t,self.AddVariables,self.MultiplyVariables,self.SetVariables,self.AddParameters,self.MultiplyParameters,self.SetParameters)
         
     def copy(self):
         return copy(self)
@@ -368,6 +472,16 @@ class Scheme:
                     for j in range(len(finalState)):
                         finalState[j] = finalState[j] * toMult[j]
                         
+                # Set variables
+                if (len(curChange.SetVariables) > 0):
+                    if (type(curChange.SetVariables) == dict):                        
+                        # If any values are missing, they will be set to current values
+                        toSet = DictToArray(curChange.SetVariables,VarsMeta,curInit)
+                    else:
+                        toSet = curChange.SetVariables
+                    for j in range(len(finalState)):
+                        finalState[j] =  toSet[j]
+                        
                 # Add to parameters
                 if (len(curChange.AddParameters) > 0):
                     if (type(curPars) == dict):
@@ -403,6 +517,22 @@ class Scheme:
                     else:
                         for j in range(len(curPars)):
                             curPars[j] = curPars[j] * toMult[j]
+                            
+                # Set Parameters
+                if (len(curChange.SetParameters) > 0):
+                    if (type(curChange.SetParameters) == dict):                        
+                        # If any values are missing, they will be set to current values
+                        toSet = DictToArray(curChange.SetParameters,ParsMeta,curPars)
+                    else:
+                        toSet = curChange.SetParameters
+                    
+                    if (type(curPars) == dict):
+                        # for key in curPars:
+                        for key in curChange.SetParameters:
+                            curPars[key] = curChange.SetParameters[key]
+                    else:
+                        for j in range(len(curPars)):
+                            curPars[j] = toSet[j]
                 
                 # Set curInit for next part
                 curInit = finalState
@@ -442,7 +572,8 @@ class Scheme:
     def plot(self,fig=[],linestyle='-',color='k',showChanges=True,describeChanges=True):
         
         # If simulation has not been run, run it now
-        if (~hasattr(self,'result')):
+        # if (~hasattr(self,'result')):
+        if (hasattr(self,'result') == False):
             self.simulate()
         
         # Get model meta information
