@@ -203,7 +203,7 @@ def ArbitraryFunctionCall(t,x,ps,modelFlows,varsMeta,parsMeta):
     for key in modelFlows:
         allFlows[i] = eval(key)
         i = i + 1
-
+        
     # Initialize outputs as zero
     dxdt = np.zeros(x.shape)
     # Go through each variable
@@ -285,7 +285,8 @@ def simulateModel(ModelFlowAndMeta,TimeRange,InitialConditions,Parameters):
     # ParsArray =Parameters
     
     
-    sol = solve_ivp(ModelFunction,[t0,tEnd],InitArray,t_eval=TimeRange,args=ParsArray)
+    sol = solve_ivp(ModelFunction,[t0,tEnd],InitArray,t_eval=TimeRange,args=ParsArray,rtol=1e-10,atol=1e-10)
+    # sol = solve_ivp(ModelFunction,[t0,tEnd],InitArray,t_eval=TimeRange,args=ParsArray)
     
     return sol.y
     

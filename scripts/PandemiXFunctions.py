@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import datetime
 
 
 # ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
@@ -45,6 +47,18 @@ def addWeekendsToAx(ax):
         curSunday = firstSunday + np.timedelta64(7*k,'D')
         ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
     # ax.grid(axis='y')
+
+def getColormapFromList(nameList,N=None):
+    # Small helper functions because "matplotlib.colors.LinearSegmentedColormap.from_list" is difficult to remember
+    if N == None:
+        N = len(nameList)
+    cmap = colors.LinearSegmentedColormap.from_list("", nameList,N=N)
+    return cmap 
+
+def weekToDate(array):
+    # Helper function since "strptime(x + '-1', "%Y-W%W-%w")" is difficult to remember
+
+    return np.array([np.datetime64(datetime.datetime.strptime(x + '-1', "%Y-W%W-%w")) for x in array])
 
 def getCases(type='raw',includeLatest=False,includeReinfections=True,returnReinfections = False,firstDate=np.datetime64('2020-01-27'),lastDate=np.datetime64('today')):
     # Returns number of positive cases and the correpsponding days
