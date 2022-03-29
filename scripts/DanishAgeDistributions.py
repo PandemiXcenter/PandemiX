@@ -248,6 +248,12 @@ fig.tight_layout()
 
 fig.savefig(path_figs+'Agedistribution_CasesWeeklyOnlyRatio')
 
+
+ax2.set_ylim(top=1)
+fig.tight_layout()
+
+fig.savefig(path_figs+'Agedistribution_CasesWeeklyOnlyRatioZoom')
+
 # %%
 fig,ax2 = plt.subplots(figsize=(13,6.5))
 
@@ -313,7 +319,8 @@ for curAge in dfAge.Aldersgruppe.unique():
     # ax1.plot(thisdf.Dato,thisdf['Positive pr. 100.000 borgere']/1000,'.-',label=curAge)
     # ax2.plot(thisdf.Dato,np.cumsum(thisdf['Positive pr. 100.000 borgere'])/1000,'.-',label=curAge)
     curCumSum = np.cumsum(thisdf['Positive pr. 100.000 borgere'])
-    curStartIndex = thisdf[thisdf.Uge == ('2021-W'+firstUgeNum)].index[0]
+    curStartIndex = thisdf[thisdf.Uge == ('2021-U'+firstUgeNum)].index[0] # On 2022-03-29, SSI apparently changed to use "U" instead of "W" ?
+    # curStartIndex = thisdf[thisdf.Uge == ('2021-W'+firstUgeNum)].index[0]
     # curStartIndex = thisdf[thisdf.Uge == '2021-W40'].index[0]
     toSubtract = curCumSum.loc[curStartIndex]
     ax2.plot(thisdf.Dato,(np.cumsum(thisdf['Positive pr. 100.000 borgere'])-toSubtract)/1000,'.-',label=curAge)
@@ -356,6 +363,9 @@ fig.tight_layout()
 fig.savefig(path_figs+'Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecent')
 
 # %%
+# thisdf[thisdf.Uge == ('2021-W'+firstUgeNum)]
+
+# %%
 fig,ax2 = plt.subplots(figsize=(13,6.5))
 
 fig.patch.set_facecolor('xkcd:off white')
@@ -367,7 +377,8 @@ firstUgeNum = '50'
 for curAge in dfAge.Aldersgruppe.unique():
     thisdf = dfAge[dfAge.Aldersgruppe == curAge]
     curCumSum = np.cumsum(thisdf['Positive pr. 100.000 borgere'])
-    curStartIndex = thisdf[thisdf.Uge == ('2021-W'+firstUgeNum)].index[0]
+    curStartIndex = thisdf[thisdf.Uge == ('2021-U'+firstUgeNum)].index[0] # On 2022-03-29, SSI apparently changed to use "U" instead of "W" ?
+    # curStartIndex = thisdf[thisdf.Uge == ('2021-W'+firstUgeNum)].index[0]
     # curStartIndex = thisdf[thisdf.Uge == '2021-W40'].index[0]
     toSubtract = curCumSum.loc[curStartIndex]
     ax2.plot(thisdf.Dato,(np.cumsum(thisdf['Positive pr. 100.000 borgere'])-toSubtract)/1000,'.-',label=curAge)
@@ -517,6 +528,13 @@ fig.tight_layout()
 
 
 fig.savefig(path_figs+'Agedistribution_IndlagteWeekly')
+
+ax1.set_ylim(top=25)
+
+fig.savefig(path_figs+'Agedistribution_IndlagteWeeklyZoom')
+
+# %%
+
 
 # %% [markdown]
 # # Stacked
