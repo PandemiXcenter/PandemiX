@@ -30,7 +30,7 @@ Furthermore, asymptomatic individuals are considered, as well as individuals qua
 Symptomatic individuals are assumed to quarantine as well, and for simplicity, quarantine is asssumed to be perfect, i.e. quarantined individual do not contribute to the infectivity pressure.
 Testing is assumed to be performed for all groups, excluding symptomatic cases. Only second stage of exposed, pre-symptomatic and asymptomatic are assumed to be found positive, and hence testing does not affect other groups. 
 
-For purposes of analysis, we distinquish between recovered individuals that were quarantined due to testing and due to symptoms.
+For purposes of analysis, we distinquish between recovered individuals that were quarantined due to testing and due to symptoms. However, we assume that all symptomatic cases get tested seperate from the testing considering within the model.
 
 The full model formulation is given below:
 
@@ -42,8 +42,8 @@ The full model formulation is given below:
     \dot{I} &= \gamma \rho P - \nu I \\
     \dot{A} &= \gamma (1-\rho) P - \nu A -\tau A \\
     \dot{Q} &= \tau (E_2 + P + A) - \nu Q \\
-    \dot{R_p} &= \nu Q \\
-    \dot{R_n} &= \nu A + \nu I
+    \dot{R_p} &= \nu Q + \nu I \\
+    \dot{R_n} &= \nu A 
 \end{align}
 Variables are scaled by population, such that $S+E_1+E_2+P+I+A+Q+R_p+R_n = 1$. 
 Furthermore, one differential equation can in general be omitted as the full system sums to unity.
@@ -64,6 +64,7 @@ Furthermore, one differential equation can in general be omitted as the full sys
 \end{tabular}
 \end{table}
 
+The total testing effort is 
 
 \section{Model analysis}
 \subsection{Definitions and epidemic isolines}
@@ -121,9 +122,9 @@ For notational purposes, we define for each variable $x$, the integral over the 
 Integrating the equations above over the entire epidemic yields:
 \begin{align}
     \log{\sigma} &= - \beta (T_P - T_A) \\
-    \sigma - S_0 - E_{1,0} &= - (\gamma + \tau) K_{E_2} \\
-    \sigma - S_0 - E_{1,0} &= -(\gamma + \tau) K_P - \tau K_{E_2} \\
-    \sigma - S_0 - E_{1,0} &= -(\nu + \tau) K_A -(\gamma \rho + \tau) K_P - \tau K_{E_2}
+    \sigma - S_0 - E_{1,0} &= - (\gamma + \tau) T_{E_2} \\
+    \sigma - S_0 - E_{1,0} &= -(\gamma + \tau) T_P - \tau T_{E_2} \\
+    \sigma - S_0 - E_{1,0} &= -(\nu + \tau) T_A -(\gamma \rho + \tau) T_P - \tau T_{E_2} 
 \end{align}
 
 Where $S_0$ and $E_{1,0}$ are initial conditions for $S(t)$ and $E_1(t)$ respectively. 
@@ -133,7 +134,7 @@ In the limit where $S_0 \rightarrow 1$ and $E_{1,0} \rightarrow 0$, we can rewri
     \log{\sigma} &= - \beta (T_P - T_A) \\
     \sigma &= 1 - (\gamma + \tau) T_{E_2} \\
     \sigma &= 1 -(\gamma + \tau) T_P - \tau T_{E_2} \\
-    \sigma &= 1 -(\nu + \tau) T_A -(\gamma \rho + \tau) T_P - \tau T_{E_2}
+    \sigma &= 1 -(\nu + \tau) T_A -(\gamma \rho + \tau) T_P - \tau T_{E_2} 
 \end{align}
 
 Assuming $T_P + T_A \neq 0$, this can be written as:
@@ -143,6 +144,20 @@ Assuming $T_P + T_A \neq 0$, this can be written as:
     T_P &= \frac{1}{\gamma + \tau}\left( 1 - \sigma - \tau T_{E_2} \right)\\
     T_A &= \frac{1}{\nu + \tau} \left(1 - \sigma -(\gamma \rho + \tau) T_P - \tau T_{E_2}\right)
 \end{align}
+
+
+Furthermore, observe that integrating $\dot{R_n} = \nu A$ from $t=0$ to $t=\infty$ yields $r_n = \nu T_A$. 
+
+\subsection{Explicit expression for ratio of positive}
+% 1 - (nu/(nu+tau))*(1-tau/(gamma+tau))*(1-(gamma*rho+tau)/(gamma+tau))
+Combining the above equations reveal that 
+\begin{align}
+    \dfrac{r_p}{r_p+r_n} &= 1 - \dfrac{\nu}{1-\sigma} T_A \\
+    \dfrac{r_p}{r_p+r_n} &= 1- \left(\dfrac{\nu}{\nu+ \tau} \right) \left(1- \dfrac{\tau}{\gamma+\tau} \right) \left(1-\dfrac{\gamma \rho + \tau}{\gamma + \tau}\right)
+\end{align}
+Note that this expression is independent of $\sigma$. 
+
+Furthermore, in the absence of tests, i.e. for $\tau = 0$, the expression becomes $\dfrac{r_p}{r_p+r_n}  = 1- 1(1-0)(1-\rho) = \rho $. This is expected, as only the symptomatic cases, $I$, are found in the situation where $\tau=0$, and the symptomatic cases make up exactly $\rho$ of all cases.
 
 
 \section{Numeric examples}

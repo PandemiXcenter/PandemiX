@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.23)  25 MAR 2022 15:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.3) (preloaded format=pdflatex 2022.3.23)  1 APR 2022 11:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -232,12 +232,12 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <./../Figures/TestingModelling_IsolineExamples.png, id=26, 867.24pt x 578.16pt>
 File: ./../Figures/TestingModelling_IsolineExamples.png Graphic file (type png)
 <use ./../Figures/TestingModelling_IsolineExamples.png>
-Package pdftex.def Info: ./../Figures/TestingModelling_IsolineExamples.png  used on input line 155.
+Package pdftex.def Info: ./../Figures/TestingModelling_IsolineExamples.png  used on input line 169.
 (pdftex.def)             Requested size: 483.69687pt x 322.47055pt.
 <./../Figures/TestingModelling_AlongIsoline.png, id=27, 867.24pt x 578.16pt>
 File: ./../Figures/TestingModelling_AlongIsoline.png Graphic file (type png)
 <use ./../Figures/TestingModelling_AlongIsoline.png>
-Package pdftex.def Info: ./../Figures/TestingModelling_AlongIsoline.png  used on input line 162.
+Package pdftex.def Info: ./../Figures/TestingModelling_AlongIsoline.png  used on input line 176.
 (pdftex.def)             Requested size: 483.69687pt x 322.47055pt.
 
 
@@ -247,13 +247,13 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 Here is how much of TeX's memory you used:
  3120 strings out of 478582
  49065 string characters out of 2843872
- 357724 words of memory out of 3000000
+ 358724 words of memory out of 3000000
  21292 multiletter control sequences out of 15000+600000
  472168 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,10n,62p,337b,237s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 55i,10n,62p,401b,237s stack positions out of 10000i,1000n,20000p,200000b,80000s
 <C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/rakrpe/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on NotesForTestModelling.pdf (5 pages, 357114 bytes).
+Output written on NotesForTestModelling.pdf (5 pages, 359728 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
