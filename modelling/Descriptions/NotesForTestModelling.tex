@@ -64,7 +64,10 @@ Furthermore, one differential equation can in general be omitted as the full sys
 \end{tabular}
 \end{table}
 
-The total testing effort is 
+The total testing effort due to asymptomatic testing is given as $K_{\tau} = \tau (S+E_1 + E_2 + P + A + R_n)$. Note the contribution from $\tau R_n$. To account for the contribution of symptomatic testing, we consider the flow into the $I$ compartment, corresponding to immmediate testing when symptoms arise, $K_I = \gamma \rho P$. 
+Total testing is given by $K_{tot} = K_{\tau} + K_I$. 
+
+Note that $K_{\tau}(0) = \tau S$ and that $K_{\tau}  \underset{t \rightarrow \infty }{\longrightarrow} \tau (S+R_n)$. 
 
 \section{Model analysis}
 \subsection{Definitions and epidemic isolines}
