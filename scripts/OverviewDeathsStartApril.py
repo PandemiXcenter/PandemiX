@@ -10,6 +10,7 @@ import seaborn as sns
 
 import matplotlib.pyplot as plt
 plt.rcParams['figure.figsize'] = (12,8)
+plt.rcParams['figure.facecolor'] = (1,1,1,1)
 plt.rcParams["image.cmap"] = "tab10"
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.tab10.colors)
 fs_label = 16
