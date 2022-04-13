@@ -1,0 +1,100 @@
+\documentclass[NotesForTestModelling]{subfiles}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+% \pgfmathsetmacro{\CompSize}{0.5}
+\pgfmathsetmacro{\CompSize}{1 }
+\definecolor{cellColor}{cmyk}{0.33,0.10,0,0}
+\begin{document}
+
+% \begin{align}
+%     \dot{S} &= - \beta S (P+A) \\ \label{eq:modeldefinition}
+%     \dot{E_1} &= \beta S (P+A) - \gamma E_1 \\
+%     \dot{E_2} &= \gamma E_1 - \gamma E_2 - \tau E_2\\
+%     \dot{P} &= \gamma E_2 - \gamma P - \tau P\\
+%     \dot{I} &= \gamma \rho P - \nu I \\
+%     \dot{A} &= \gamma (1-\rho) P - \nu A -\tau A \\
+%     \dot{Q} &= \tau (E_2 + P + A) - \nu Q \\
+%     \dot{R_p} &= \nu Q + \nu I \\
+%     \dot{R_n} &= \nu A 
+% \end{align}
+
+\begin{tikzpicture}
+    % \node (S) at (0,0) {$S$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (S) at (0,0) {$S$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (E1) at (2,0) {$E_1$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (E2) at (4,0) {$E_2$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (P) at (6,0) {$P$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (A) at (8,0) {$A$};
+    \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (I) at (10,0) {$I$};
+    % \draw[rounded corners] ($(S)-(\CompSize,\CompSize)$) rectangle ($(S)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(E1)-(\CompSize,\CompSize)$) rectangle ($(E1)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(E2)-(\CompSize,\CompSize)$) rectangle ($(E2)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(P)-(\CompSize,\CompSize)$) rectangle ($(P)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(A)-(\CompSize,\CompSize)$) rectangle ($(A)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(I)-(\CompSize,\CompSize)$) rectangle ($(I)+(\CompSize,\CompSize)$) ;
+
+    
+    \draw [-{Latex[scale=2]}]  (S) -- (E1);
+
+    % \draw (1,1) -- (3,2);
+    % \draw (1,1) -- (3,4);
+\end{tikzpicture}
+
+% \begin{tikzpicture}[scale=2,every node/.style={scale=2}]
+%     % Niche as a wall
+%     \draw[rounded corners,fill=lightgrey,opacity=0.5,dotted] (-3,-0.75) rectangle (3,0.75);
+%     \node (nicheBorder) at (0,1){}; % For feedback on the niche
+%     \draw[rounded corners,fill=nicheCellColor] (-4,-0.75) rectangle (4,-1.25);
+%     % HSC
+%     %\node[minimum size = 1cm,circle,fill=cellColor,draw] (NC) at (-1.5,0) {$N_x$};
+%     %\node[minimum size = 1cm,circle,fill=cellColor2,draw] (NL) at (1.5,0) {$N_y$};
+%     \node[minimum size = 1cm,circle,fill=cellColor,draw] (NC) at (-2,0) {$N_H$};
+%     \node[minimum size = 1cm,circle,fill=cellColor2,draw] (NL) at (2,0) {$N_L$};
+%     % Mature
+%     \node[minimum size = 1cm,circle,fill=cellColor,draw] (MC) at (-2,2.5) {$M_H$};
+%     \node[minimum size = 1cm,circle,fill=cellColor2,draw] (ML) at (2,2.5) {$M_L$};
+%     % Dead cells / Debris
+%     \node[minimum size = 1cm,circle,fill=lightgrey,draw] (a) at (0,4) {$D$};
+%     % Immune system
+%     \node[minimum size = 1cm,rounded corners,fill=lightgrey,draw] (s) at (0,2) {$S$};
+%     % Arrow and multiplication to mature
+%     \node[circle,minimum size = 1mm, draw] (multC) at ($(MC)!0.5!(NC)$){};
+%     \node[circle,minimum size = 1mm, draw] (multL) at ($(ML)!0.5!(NL)$){};
+%     \node (xC) at (multC) {$\times$};
+%     \node (xL) at (multL) {$\times$};
+%     \draw[-Latex] (NC) -- (multC) node [pos=0.5,left] {}; 
+%     \draw[-Latex] (multC) -- (MC) node [pos=0.5,left] {};
+%     \draw[-Latex] (NL) -- (multL) node [pos=0.5,right] {};
+%     \draw[-Latex] (multL) -- (ML) node [pos=0.5,right] {};
+%     % Rest of the arrows
+%     \draw[-Latex] (MC) -- (a) node [pos=0.5,left] {};
+%     \draw[-Latex] (ML) -- (a) node [pos=0.5,right] {};
+%     \draw[-Latex] (a) -- (s) node [pos=0.5,right] {};
+%     \node (aOut) at ($(a)+(0,1.2)$){};
+%     \draw[-Latex] (a) -- (aOut) node [pos=0.5,left] {};
+%     % Immune system respone
+%     %\draw[-Latex,dotted,color=red,very thick] (s) -- (nicheBorder);
+%     \draw[-Latex] (s) -- (nicheBorder) node [pos=0.5,left] {};;
+%     \node (elimS) at (nicheBorder) {\tiny Eliminated};
+%     \node (elimA) at (aOut) {\tiny Eliminated};
+%     \draw[-Latex,dotted,color=red,very thick] (s) to[out=45, in=0] ($(aOut)!0.33!(a)$);
+%     %\draw[-Latex,dotted,color=red,very thick] (s) to[out=215, in=45] (NC);
+%     %\draw[-Latex,dotted,color=red,very thick] (s) to[out=-45, in=-215] (NL);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- (NC);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- (NL);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- ($(multC)!0.4!(NC)$);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- ($(multL)!0.4!(NL)$);
+    
+%     % Limiting arrow from NH to NL
+%     \draw[-|,thick] ($(NC)!0.2!(NL)$) -- ($(NC)!0.8!(NL)$);
+%     \draw[-|,thick] ($(NL)!0.2!(NC)$) -- ($(NL)!0.8!(NC)$);
+%     %\draw[-|,thick] (NL.west) -- (NC.east);
+    
+%     % Lightning
+%     \node at ($(s.north west)!0.15!(a.south west)$) [color=YellowOrange,xscale=-1]{\large \Lightning \; };
+%     %\node at (s.north west) [above=3mm]{$I$};
+%     \end{tikzpicture}
+
+% \section{Model-description}
+
+\end{document}

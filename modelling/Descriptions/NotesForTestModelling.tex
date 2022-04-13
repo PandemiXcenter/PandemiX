@@ -5,6 +5,8 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tikz}
+\usepackage{subfiles}
 \begin{document}
 
 % \section*{Todo-list}
@@ -29,7 +31,7 @@ extended to consider two stages of exposed prior to infectivity and a pre-sympto
 Furthermore, asymptomatic individuals are considered, as well as individuals quarantined due to testing.
 Symptomatic individuals are assumed to quarantine as well, and for simplicity, quarantine is asssumed to be perfect, i.e. quarantined individual do not contribute to the infectivity pressure.
 Testing is assumed to be performed for all groups, excluding symptomatic cases. Only second stage of exposed, pre-symptomatic and asymptomatic are assumed to be found positive, and hence testing does not affect other groups. 
-
+ 
 For purposes of analysis, we distinquish between recovered individuals that were quarantined due to testing and due to symptoms. However, we assume that all symptomatic cases get tested seperate from the testing considering within the model.
 
 The full model formulation is given below:
