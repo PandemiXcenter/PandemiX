@@ -129,8 +129,8 @@ for k in range(0,5):
     # curRegion = allRegions[k-1]
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
-#     curDates = curdf.index
-    curDates = curdf.index.get_level_values(1)
+    curDates = curdf.index
+#     curDates = curdf.index.get_level_values(1)
 #     curCase = curdf['Bekræftede tilfælde']
     curCase = curdf['Bekræftede tilfælde i alt']
     # curAdm = curdf['Indlæggelser']
@@ -194,8 +194,8 @@ for k in range(0,5):
     # curRegion = allRegions[k-1]
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
-#     curDates = curdf.index
-    curDates = curdf.index.get_level_values(1)
+    curDates = curdf.index
+#     curDates = curdf.index.get_level_values(1)
     # curCase = curdf['Bekræftede tilfælde']
     curAdm = curdf['Indlæggelser']
     # curDea = curdf['Døde']
@@ -264,8 +264,8 @@ for k in range(0,5):
     curRegion = allRegions[k]
     curBorgerCount = borgerCount[k]
     curdf = groupdf.loc[curRegion,:,:]
-    # curDates = curdf.index
-    curDates = curdf.index.get_level_values(1)
+    curDates = curdf.index
+#     curDates = curdf.index.get_level_values(1)
 #     curCase = curdf['Bekræftede tilfælde']
     curCase = curdf['Bekræftede tilfælde i alt']
 
@@ -361,8 +361,8 @@ for k in range(0,5):
     curRegion = allRegions[k]
     curBorgerCount = borgerCount[k]
     curdf = groupdf.loc[curRegion,:,:]
-    # curDates = curdf.index.values[:-1]
-    curDates = curdf.index.get_level_values(1).values[:-1]
+    curDates = curdf.index.values[:-1]
+    # curDates = curdf.index.get_level_values(1).values[:-1]
     # curCase = curdf['Bekræftede tilfælde'].values[:-1]
     curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      
@@ -535,8 +535,8 @@ for k in range(0,5):
      curRegion = allRegions[k]
      curBorgerCount = borgerCount[k]
      curdf = groupdf.loc[curRegion,:,:]
-     # curDates = curdf.index.values[:-1]
-     curDates = curdf.index.get_level_values(1).values[:-1]
+     curDates = curdf.index.values[:-1]
+#      curDates = curdf.index.get_level_values(1).values[:-1]
      # curCase = curdf['Bekræftede tilfælde'].values[:-1]
      curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      curCumSum = np.cumsum(curCase)
@@ -628,9 +628,9 @@ for k in range(0,5):
      curRegion = allRegions[k]
      curBorgerCount = borgerCount[k]
      curdf = groupdf.loc[curRegion,:,:]
-     # curDates = curdf.index.values[:-1]
+     curDates = curdf.index.values[:-1]
 #     curDates = curdf.index.get_level_values(1)
-     curDates = curdf.index.get_level_values(1).values[:-1]
+     # curDates = curdf.index.get_level_values(1).values[:-1]
      # curCase = curdf['Bekræftede tilfælde'].values[:-1]
      curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      curCumSum = np.cumsum(curCase)
@@ -723,8 +723,8 @@ k = 0
 curRegion = allRegions[k]
 curBorgerCount = borgerCount[k]
 curdf = groupdf.loc[curRegion,:,:]
-# curDates = curdf.index.values[:-1]
-curDates = curdf.index.get_level_values(1).values[:-1]
+curDates = curdf.index.values[:-1]
+# curDates = curdf.index.get_level_values(1).values[:-1]
 # curCase = curdf['Bekræftede tilfælde'].values[:-1]
 curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
 curCumSum = np.cumsum(curCase)
@@ -853,7 +853,7 @@ for k in range(0,5):
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
     curDates = curdf.index
-    curDates = curdf.index.get_level_values(1)
+#     curDates = curdf.index.get_level_values(1)
     # curCase = curdf['Bekræftede tilfælde']
 #     curAdm = curdf['Indlæggelser']
     curDea = curdf['Døde']
