@@ -31,6 +31,9 @@ Data på figuren er vist ud fra den dag prøven er taget. Af denne grund er data
 ### Respirator
 ![](../Figures/CurrentStatus/Respirator.png)
 
+### Tests
+![](../Figures/CurrentStatus/Tests.png)
+
 <!-- 
 Intensiv | Respirator
 :-------------------------:|:-------------------------:

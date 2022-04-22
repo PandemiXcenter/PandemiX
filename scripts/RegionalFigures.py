@@ -8,6 +8,7 @@ import seaborn as sns
 
 
 import matplotlib.pyplot as plt
+# %matplotlib widget
 plt.rcParams['figure.figsize'] = (12,8)
 plt.rcParams["image.cmap"] = "tab10"
 plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.tab10.colors)
@@ -22,6 +23,7 @@ parameters = {
                 'lines.linewidth': 3
              }
 plt.rcParams.update(parameters)
+# %matplotlib widget
 from matplotlib import cm # Colormaps
 import matplotlib.colors as colors
 # cmap = plt.cm.get_cmap('Dark2',len(ageGroups))
@@ -55,13 +57,13 @@ def rnTime(t,meanWidth):
 
 # %%
 # Define paths
-rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
+rootdir_data = os.getcwd() +"/../DanskeData/" 
 
-path_data = rootdir_data + "ssi_data\\"
-path_dash = rootdir_data + "ssi_dashboard\\"
-path_vacc = rootdir_data + "ssi_vacc\\"
+path_data = rootdir_data + "ssi_data/"
+path_dash = rootdir_data + "ssi_dashboard/"
+path_vacc = rootdir_data + "ssi_vacc/"
 
-path_figs = os.getcwd() +"\\..\\Figures\\" 
+path_figs = os.getcwd() +"/../Figures/" 
 
 # %%
 latestsubdir = list(os.walk(path_dash))[0][1][-1]
@@ -86,8 +88,10 @@ groupdf = df.groupby(['Region','Prøvetagningsdato']).sum()
 # groupdf[groupdf.index == 'Hovedstaden']
 # groupdf.index.names
 curdf = groupdf.loc[allRegions[1],:,:]
-curDates = curdf.index.get_level_values(1)
-curCase = curdf['Bekræftede tilfælde']
+# curDates = curdf.index.get_level_values(1)
+curDates = curdf.index
+# curCase = curdf['Bekræftede tilfælde']
+curCase = curdf['Bekræftede tilfælde i alt']
 curAdm = curdf['Indlæggelser']
 curDea = curdf['Døde']
 
@@ -104,17 +108,14 @@ groupdf.loc[allRegions[0],:,:].tail()
 
 # firstDate = np.datetime64('2021-10-01')
 firstDate = np.datetime64('2021-11-01')
-lastDate = np.datetime64('2022-02-01')
+lastDate = np.datetime64('today')
 
 # firstDateShort = np.datetime64('2021-10')
 firstDateShort = np.datetime64('2021-11')
-lastDateShort = np.datetime64('2022-02')
+lastDateShort = np.datetime64('2022-03')
 curXticks = np.arange(firstDateShort,lastDateShort+np.timedelta64(1,'M'))
 
 meanWidth= 7
-
-# %%
-
 
 # %%
 # Compare cases
@@ -128,8 +129,10 @@ for k in range(0,5):
     # curRegion = allRegions[k-1]
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
+#     curDates = curdf.index
     curDates = curdf.index.get_level_values(1)
-    curCase = curdf['Bekræftede tilfælde']
+#     curCase = curdf['Bekræftede tilfælde']
+    curCase = curdf['Bekræftede tilfælde i alt']
     # curAdm = curdf['Indlæggelser']
     # curDea = curdf['Døde']
 
@@ -148,8 +151,9 @@ for k in range(0,5):
     ax.grid(axis='y')
 
 #     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
-    ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(7,'D'))
+    ax.set_xlim(firstDateShort,lastDate)
     ax.set_xticks(curXticks)
+    ax.set_xlim(firstDateShort,lastDate+np.timedelta64(4,'D'))
     ax.set_ylim(bottom=0)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax.spines['top'].set_visible(False) 
@@ -190,6 +194,7 @@ for k in range(0,5):
     # curRegion = allRegions[k-1]
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
+#     curDates = curdf.index
     curDates = curdf.index.get_level_values(1)
     # curCase = curdf['Bekræftede tilfælde']
     curAdm = curdf['Indlæggelser']
@@ -212,6 +217,7 @@ for k in range(0,5):
 #     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(7,'D'))
     ax.set_xticks(curXticks)
+    ax.set_xlim(firstDateShort,lastDate+np.timedelta64(4,'D'))
     ax.set_ylim(bottom=0)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax.spines['top'].set_visible(False) 
@@ -258,8 +264,10 @@ for k in range(0,5):
     curRegion = allRegions[k]
     curBorgerCount = borgerCount[k]
     curdf = groupdf.loc[curRegion,:,:]
+    # curDates = curdf.index
     curDates = curdf.index.get_level_values(1)
-    curCase = curdf['Bekræftede tilfælde']
+#     curCase = curdf['Bekræftede tilfælde']
+    curCase = curdf['Bekræftede tilfælde i alt']
 
     ax = allAxes.flatten()[k]
 
@@ -278,7 +286,9 @@ for k in range(0,5):
 #     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(7,'D'))
     ax.set_xticks(curXticks)
+    ax.set_xlim(firstDateShort,lastDate+np.timedelta64(4,'D'))
     ax.set_ylim(bottom=0)
+    ax.set_ylim(top=1.2)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax.spines['top'].set_visible(False) 
     ax.spines['right'].set_visible(False) 
@@ -306,10 +316,6 @@ ax1.text(0.5, 0,txt2,
      
 if saveFigures:
      plt.savefig(path_figs+'/Regionalt/CasesPercent')
-
-# %%
-curDates[3]
-# curCase[-2]
 
 # %%
 # # # len(curdf['Bekræftede tilfælde'])
@@ -355,8 +361,10 @@ for k in range(0,5):
     curRegion = allRegions[k]
     curBorgerCount = borgerCount[k]
     curdf = groupdf.loc[curRegion,:,:]
+    # curDates = curdf.index.values[:-1]
     curDates = curdf.index.get_level_values(1).values[:-1]
-    curCase = curdf['Bekræftede tilfælde'].values[:-1]
+    # curCase = curdf['Bekræftede tilfælde'].values[:-1]
+    curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      
     # firstDateIndex = np.where(curDates == firstDate)[0][0]
     firstDateIndex = np.where(curDates == (firstDate-np.timedelta64(7,'D')))[0][0]
@@ -390,6 +398,7 @@ for k in range(0,5):
 #     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
     ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(7,'D'))
     ax.set_xticks(curXticks)
+    ax.set_xlim(firstDateShort,lastDate+np.timedelta64(4,'D'))
     ax.set_ylim(bottom=0)
     ax.set_ylim(top=np.ceil(allMax))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
@@ -426,6 +435,73 @@ ax1.text(0.5, 0,txt2,
 if saveFigures:
      plt.savefig(path_figs+'/Regionalt/CasesPercentWeek')
 
+# %%
+# # Compare cases, normalized by antal_bor
+# fig,allAxes = plt.subplots(2,3,sharey=True,figsize=(16,6),tight_layout=True)
+
+
+# # for k in range(1,6):
+# #     curRegion = allRegions[k-1]
+# #     curBorgerCount = borgerCount[k-1]
+# for k in range(0,5):
+#      curRegion = allRegions[k]
+#      curBorgerCount = borgerCount[k]
+#      curdf = groupdf.loc[curRegion,:,:]
+#      curDates = curdf.index.get_level_values(1).values[:-1]
+#      curCase = curdf['Bekræftede tilfælde'].values[:-1]
+
+#      ax = allAxes.flatten()[k]
+
+#      meanDates = rnTime(curDates,meanWidth)
+#      meanCase = meanWidth*100*rnMean(curCase,meanWidth)/curBorgerCount
+#      # ax.step(meanDates,meanCase,'k',where='mid')
+#      # ax.step(meanDates[5::7],meanCase[5::7],'k')
+#      # ax.step(meanDates[::7],meanCase[::7],'k',where='mid')
+#      iniIndex = 3
+#      ax.step(meanDates[iniIndex::7],meanCase[iniIndex::7],'k',where='pre')
+#      ax.fill_between(meanDates[iniIndex::7],meanCase[iniIndex::7],step='pre',color='k',alpha=0.5)
+
+
+
+#      ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
+#      ax.set_xticks(curXticks)
+#      ax.set_ylim(bottom=0)
+#      ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
+#      ax.spines['top'].set_visible(False) 
+#      ax.spines['right'].set_visible(False) 
+#      ax.set_title(curRegion)
+#      ax.grid()
+#      ax.yaxis.set_tick_params(labelleft=True)
+#      ax.set_ylabel('Tilfælde [%]',fontsize=12)
+
+# # ax1 = allAxes.flatten()[0]
+# ax1 = allAxes.flatten()[5]
+# ax1.axis('off')
+# # # ax1.set_title('Tilfælde \n[% af befolkning]')
+# # ax1.text(0.5, 0.75,'Sum af ugentlige tilfælde \n[% af befolkning]',
+# #      horizontalalignment='center',
+# #      verticalalignment='center',
+# #      transform = ax1.transAxes,
+# #      fontsize=20)
+
+# txt1 = 'Sum af ugentlige tilfælde \n[% af befolkning]'
+# txt2 = 'Rasmus Kristoffer Pedersen\n PandemiX Center, Roskilde Universitet\n\n\nData fra SSI overvågningsdata, dashboard-fil\n\nFilnavn:\n/Regionalt_DB/03_bekraeftede_tilfaelde_doede_indlagte_pr_dag_pr_koen.csv\nsamt indbyggertal fra: /Regionalt_DB/13_regionale_kort.csv.csv'
+# ax1.text(0.5, 0.55,txt1,
+#      horizontalalignment='center',
+#      verticalalignment='bottom',
+#      transform = ax1.transAxes,
+#      fontsize=20)
+# ax1.text(0.5, 0,txt2,
+#      horizontalalignment='center',
+#      verticalalignment='bottom',
+#      transform = ax1.transAxes,
+#      fontsize=7)
+     
+# if saveFigures:
+#      plt.savefig(path_figs+'/Regionalt/CasesPercentWeekOld')
+
+# %%
+# curDates[startIndex]
 
 # %%
 # Compare cases, normalized by antal_bor
@@ -443,6 +519,14 @@ curXticks_Short = np.array([np.datetime64(x) for x in [
      '2022-01-15',
      '2022-02-01',
      '2022-02-15',
+     '2022-03-01',
+     '2022-03-15',
+     '2022-04-01',
+     '2022-04-15',
+     '2022-05-01',
+     '2022-05-15',
+     '2022-06-01',
+     '2022-06-15',
 ]])
 # for k in range(1,6):
 #     curRegion = allRegions[k-1]
@@ -451,8 +535,10 @@ for k in range(0,5):
      curRegion = allRegions[k]
      curBorgerCount = borgerCount[k]
      curdf = groupdf.loc[curRegion,:,:]
+     # curDates = curdf.index.values[:-1]
      curDates = curdf.index.get_level_values(1).values[:-1]
-     curCase = curdf['Bekræftede tilfælde'].values[:-1]
+     # curCase = curdf['Bekræftede tilfælde'].values[:-1]
+     curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      curCumSum = np.cumsum(curCase)
 
      ax = allAxes.flatten()[k]
@@ -467,7 +553,7 @@ for k in range(0,5):
      midSum = (latestSum+startSum)/2
      diffSum = latestSum-startSum
 
-     annoDate = lastDate-np.timedelta64(1,'D')
+     annoDate = lastDate+np.timedelta64(2,'D')
      annoDate1 = annoDate - np.timedelta64(3,'D')
      annoDate2 = annoDate + np.timedelta64(3,'D')
      annoColor = 'b'
@@ -492,6 +578,7 @@ for k in range(0,5):
      # ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
      ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(14,'D'))
      ax.set_xticks(curXticks_Short)
+     ax.set_xlim(firstDateShort,lastDate+np.timedelta64(7,'D'))
      ax.set_yticks(np.arange(0,60,10))
      ax.set_ylim(bottom=0)
      ax.set_ylim(top=latestSum*1.2)
@@ -526,9 +613,6 @@ if saveFigures:
      plt.savefig(path_figs+'/Regionalt/CasesCumulative')
 
 # %%
-
-
-# %%
 # Compare cases, normalized by antal_bor
 
 
@@ -544,8 +628,11 @@ for k in range(0,5):
      curRegion = allRegions[k]
      curBorgerCount = borgerCount[k]
      curdf = groupdf.loc[curRegion,:,:]
+     # curDates = curdf.index.values[:-1]
+#     curDates = curdf.index.get_level_values(1)
      curDates = curdf.index.get_level_values(1).values[:-1]
-     curCase = curdf['Bekræftede tilfælde'].values[:-1]
+     # curCase = curdf['Bekræftede tilfælde'].values[:-1]
+     curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
      curCumSum = np.cumsum(curCase)
 
      ax = allAxes.flatten()[k]
@@ -636,8 +723,10 @@ k = 0
 curRegion = allRegions[k]
 curBorgerCount = borgerCount[k]
 curdf = groupdf.loc[curRegion,:,:]
+# curDates = curdf.index.values[:-1]
 curDates = curdf.index.get_level_values(1).values[:-1]
-curCase = curdf['Bekræftede tilfælde'].values[:-1]
+# curCase = curdf['Bekræftede tilfælde'].values[:-1]
+curCase = curdf['Bekræftede tilfælde i alt'].values[:-1]
 curCumSum = np.cumsum(curCase)
 
 # ax = allAxes.flatten()[k]
@@ -652,11 +741,18 @@ startSum =  100 * curCumSum[startIndex]/curBorgerCount
 midSum = (latestSum+startSum)/2
 diffSum = latestSum-startSum
 
-annoDate = lastDate-np.timedelta64(14,'D')
+annoDate = lastDate+np.timedelta64(2,'D')
 annoDate1 = annoDate - np.timedelta64(3,'D')
 annoDate2 = annoDate + np.timedelta64(3,'D')
 annoColor = 'b'
 
+
+# # ax.plot([annoDate,annoDate],[startSum,latestSum],'m_-',markersize=20,linewidth=3)
+# ax.plot([annoDate,annoDate],[startSum,latestSum],color=annoColor,linewidth=2)
+# ax.plot([annoDate1,annoDate2],[startSum,startSum],color=annoColor,linewidth=2)
+# ax.plot([annoDate1,annoDate2],[latestSum,latestSum],color=annoColor,linewidth=2)
+# ax.text(annoDate2,midSum,f'{diffSum:2.0f}%',color=annoColor,fontsize=11,fontvariant='small-caps')#fontfamily='serif')
+# #     ax.text(annoDate2,midSum,f'{diffSum:2.2f}%',color=annoColor,fontsize=11,fontvariant='small-caps')#fontfamily='serif')
 
 curCumSumRatio = 100*((curCumSum)/curBorgerCount)
 ax.plot(curDates,curCumSumRatio - startSum,'b')
@@ -698,6 +794,7 @@ ax.grid(axis='y')
 # ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
 ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(7,'D'))
 ax.set_xticks(curXticks)
+ax.set_xlim(firstDateShort,lastDate+np.timedelta64(7,'D'))
 ax.set_yticks(np.arange(0,50,5))
 ax.set_ylim(bottom=0)
 # ax.set_ylim(top=latestSum*1.2)
@@ -726,16 +823,24 @@ if saveFigures:
 latestSum
 
 # %%
-print(kortdf['Bekræftede tilfælde de senest 7 dage']/kortdf['antal_bor'])
-print(kortdf['Bekræftede tilfælde']/kortdf['antal_bor'])
-kortdf
+# print(kortdf['Bekræftede tilfælde de senest 7 dage']/kortdf['antal_bor'])
+# print(kortdf['Bekræftede tilfælde']/kortdf['antal_bor'])
+# kortdf
 
 # %%
 45000/1862046
 
 # %%
-# curdf['Døde']
-# curdf.Døde.index[:,1]
+# # curdf['Døde']
+# # curdf.tail(20)
+# # curdf.Døde.index[:,1]
+# curdeath = df[df.Region == 'Hovedstaden']['Døde'].values
+# curdays = df[df.Region == 'Hovedstaden']['Prøvetagningsdato']
+# plt.figure()
+# # plt.plot(curdays,curdeath,'.:')
+# plt.plot(rnTime(curdays,7),rnMean(curdeath,7)*7)
+
+# plt.xlim(left=np.datetime64('2021-11-01'))
 
 # %%
 # Compare admissions
@@ -747,6 +852,7 @@ for k in range(0,5):
     # curRegion = allRegions[k-1]
     # curBorgerCount = borgerCount[k-1]
     curdf = groupdf.loc[curRegion,:,:]
+    curDates = curdf.index
     curDates = curdf.index.get_level_values(1)
     # curCase = curdf['Bekræftede tilfælde']
 #     curAdm = curdf['Indlæggelser']
@@ -766,13 +872,13 @@ for k in range(0,5):
          ax.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
     ax.grid(axis='y')
 
-    ax.set_xlim(firstDateShort,lastDateShort+np.timedelta64(12,'h'))
+    ax.set_xlim(firstDateShort,lastDate+np.timedelta64(12,'h'))
     ax.set_xticks(curXticks)
     ax.set_ylim(bottom=0)
      
-
-    ax.set_ylim(top=10)
-    ax.set_yticks(np.arange(0,12,2))
+    curMax = 17
+    ax.set_ylim(top=curMax)
+    ax.set_yticks(np.arange(0,curMax,2))
 
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax.spines['top'].set_visible(False) 
@@ -784,7 +890,7 @@ for k in range(0,5):
 # ax1 = allAxes.flatten()[0]
 ax1 = allAxes.flatten()[5]
 ax1.axis('off')
-txt1 = 'Antal daglige\ndødsfald'
+txt1 = 'Antal daglige\ndødsfald\n(Forsinket registrering,\nsidste 4 uger ikke retvisende)'
 txt2 = 'Rasmus Kristoffer Pedersen\n PandemiX Center, Roskilde Universitet\n\n\nData fra SSI overvågningsdata, dashboard-fil\n\nFilnavn:\n/Regionalt_DB/03_bekraeftede_tilfaelde_doede_indlagte_pr_dag_pr_koen.csv'
 # txt2 = 'Data fra SSI overvågningsdata, dashboard-fil\n\nFilnavn:\n/Regionalt_DB/03_bekraeftede_tilfaelde_doede_indlagte_pr_dag_pr_koen.csv\n\nRasmus Kristoffer Pedersen\n PandemiX Center, Roskilde Universitet'
 ax1.text(0.5, 0.55,txt1,
@@ -803,3 +909,8 @@ allAxes.flatten()[0].legend(loc='upper left',fontsize=10)
 
 if saveFigures:
      plt.savefig(path_figs+'/Regionalt/Deaths')
+
+# %%
+
+
+

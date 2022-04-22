@@ -27,6 +27,11 @@ body {
 
 --- 
 
+### Kumuleret, relativt til størrelsen af befolkningsgruppen, kun tilfælde siden mid-december
+![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecentDecember.png)
+
+--- 
+
 ### Kumuleret, relativt til størrelsen af befolkningsgruppen, kun nylige tilfælde
 ![](../Figures/AgeDistribution/Agedistribution_CasesWeeklyByPopulationOnlyCumulativeRecent.png)
 
@@ -43,3 +48,13 @@ body {
 
 ### Stacked
 ![](../Figures/AgeDistribution/Agedistribution_TestedeWeeklyStacked.png)
+
+
+---
+
+## Dødsfald
+
+![](../Figures/AgeDistribution/Agedistribution_DeathsWeekly.png)
+
+
+![](../Figures/AgeDistribution/Agedistribution_DeathsWeeklyNormed.png)

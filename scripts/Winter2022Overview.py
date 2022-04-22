@@ -54,13 +54,13 @@ def rnTime(t,meanWidth):
 
 # %%
 # Define paths
-rootdir_data = os.getcwd() +"\\..\\DanskeData\\" 
+rootdir_data = os.getcwd() +"/../DanskeData/" 
 
-path_data = rootdir_data + "ssi_data\\"
-path_dash = rootdir_data + "ssi_dashboard\\"
-path_vacc = rootdir_data + "ssi_vacc\\"
+path_data = rootdir_data + "ssi_data/"
+path_dash = rootdir_data + "ssi_dashboard/"
+path_vacc = rootdir_data + "ssi_vacc/"
 
-path_figs = os.getcwd() +"\\..\\Figures\\" 
+path_figs = os.getcwd() +"/../Figures/" 
 
 # %% [markdown]
 # # Load data from main datafiles
@@ -107,6 +107,7 @@ allDeas = dfDea['Antal_døde'].values
 firstDate = np.datetime64('2021-10-01')-np.timedelta64(1,'D')
 # lastDate = np.datetime64('2022-03-01')+np.timedelta64(1,'D')
 lastDate = np.datetime64('2022-03-01')
+lastDate = np.datetime64('today')
 
 meanWidth = 7
 
@@ -156,7 +157,7 @@ for k in range(lastFullFileIndex+1,len(latestsubdirs_dash)):
 
 dfKey['IndberetningDato'] = pd.to_datetime(dfKey['IndberetningDato'])
 
-print(dfKey.columns)
+# print(dfKey.columns)
 dfKey.tail()
 
 # %%
@@ -169,13 +170,19 @@ dfKeysArray[-1]['Bekræftede tilfælde i alt siden sidste opdatering']
 
 # %%
 dfKey.columns
+dfKeysArray[-1].columns
+# df
 
 # %%
 
-thisCase = dfKeysArray[k-1]['Bekræftede tilfælde siden sidste opdatering'][0]
-dfKeysArray[1]
+# thisCase = dfKeysArray[k-1]['Bekræftede tilfælde siden sidste opdatering'][0]
+# dfKeysArray[1]
 # thisNewAdm = dfKeysArray[k]['Nyindlæggelser siden sidste opdatering'][0]
 # thisDeath = dfKeysArray[k]['Dødsfald siden sidste opdatering'][0]
+dfKey.columns
+# plt.figure()
+# # plt.plot(dfKey['Daily_PCR_tests'])
+# plt.plot(dfKey['Antal prøver siden sidst'])
 
 # %%
 # Make arrays to plot
@@ -187,6 +194,7 @@ keyAdm = dfKey['Antal indlagte i dag med COVID']
 keyAdmInt = dfKey['Antal indlagt i dag på intensiv']
 keyAdmResp = dfKey['Antal indlagt i dag og i respirator']
 keyDeath = dfKey['Antal nye døde']
+keyTest = dfKey['Antal prøver siden sidst']
 
 ## Add the new data
 
@@ -199,6 +207,7 @@ keyAdm = np.append(keyAdm,dfKeysArray[0]['Antal indlagte i dag med COVID'][0])
 keyAdmInt = np.append(keyAdmInt,dfKeysArray[0]['Antal indlagt i dag på intensiv'][0])
 keyAdmResp = np.append(keyAdmResp,dfKeysArray[0]['Antal indlagt i dag og i respirator'][0])
 keyDeath = np.append(keyDeath,dfKeysArray[0]['Antal nye døde'][0])
+keyTest = np.append(keyTest,dfKeysArray[0]['Antal prøver siden sidst'][0])
 
 # Make an array for missing reinfection data
 keyCaseReInf = keyCase * np.nan 
@@ -213,6 +222,7 @@ for k in range(1,len(dfKeysArray)):
     thisAdm = dfKeysArray[k]['Indlæggelser i dag'][0]
     thisAdmInt = dfKeysArray[k]['Indlæggelser i dag (intensiv)'][0]
     thisAdmResp = dfKeysArray[k]['Indlæggelser i dag (respirator)'][0]
+    thisTest = dfKeysArray[k]['PRC-tests siden sidste opdatering'][0]
     # # print(dfKeysArray[k])
     # print(thisDate)
     # print(thisAdm)
@@ -227,6 +237,7 @@ for k in range(1,len(dfKeysArray)):
     keyAdmInt = np.append(keyAdmInt,thisAdmInt)
     keyAdmResp = np.append(keyAdmResp,thisAdmResp)
     keyDeath = np.append(keyDeath,thisDeath)
+    keyTest = np.append(keyTest,thisTest)
 
     keyCaseReInf = np.append(keyCaseReInf,thisCaseReInf)
 
@@ -244,9 +255,14 @@ dfKeyFull['Hospitalizations'] = keyAdm
 dfKeyFull['ICU'] = keyAdmInt
 dfKeyFull['Respirator'] = keyAdmResp
 dfKeyFull['Deaths'] = keyDeath
+dfKeyFull['Tests'] = keyTest
 
 # %%
-df_reinf.tail()
+# df_reinf.tail()
+# dfKeysArray[k].columns
+dfKeysArray[0]['Antal prøver siden sidst'][0]
+len(keyTest)
+keyTest
 
 # %%
 fig,ax1 = plt.subplots()
@@ -261,15 +277,15 @@ ax1.plot(df_reinf.index,df_inf.infected,':',label='New infections, regional-sum'
 
 # Draw weekends
 firstSunday = np.datetime64('2021-10-03')
-numWeeks = 20
+numWeeks = 50
 for k in range(-numWeeks,numWeeks):
      curSunday = firstSunday + np.timedelta64(7*k,'D')
      ax1.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
 ax1.grid(axis='y')
 ax1.legend(loc='upper left')
 
-ax1.set_xlim(left=np.datetime64('2021-10-01'))
-ax1.set_xlim(right=allDates.values[-1]+np.timedelta64(10,'D'))
+# ax1.set_xlim(left=np.datetime64('2021-10-01'))
+# ax1.set_xlim(right=allDates.values[-1]+np.timedelta64(10,'D'))
 ax1.set_ylim(bottom=0)
 
 # %% [markdown]
@@ -331,8 +347,9 @@ ax1.grid(axis='y')
 ax1.legend(loc='upper left')
 
 
-ax1.set_xticks(np.arange(np.datetime64('2021-11'),np.datetime64('2022-05')))
-ax1.set_xlim(left=np.datetime64('2021-11-01'),right=np.datetime64('2022-03-01'))
+ax1.set_xticks(np.arange(np.datetime64('2021-11'),np.datetime64('2022-06')))
+# ax1.set_xlim(left=np.datetime64('2021-11-01'),right=np.datetime64('2022-04-01'))
+ax1.set_xlim(left=np.datetime64('2021-11-01'),right=lastDate)
 
 ax1.set_ylim(top=1.005)
 curYticks = np.arange(0,1.1,0.1)
@@ -406,7 +423,8 @@ ax1.legend(loc='upper left')
 
 
 ax1.set_xticks(np.arange(np.datetime64('2021-11'),np.datetime64('2022-05')))
-ax1.set_xlim(left=np.datetime64('2021-11-01'),right=np.datetime64('2022-03-01'))
+# ax1.set_xlim(left=np.datetime64('2021-11-01'),right=np.datetime64('2022-04-01'))
+ax1.set_xlim(left=np.datetime64('2021-11-01'),right=lastDate)
 
 ax1.set_ylim(top=1.005)
 curYticks = np.arange(0,1.1,0.1)
@@ -418,6 +436,9 @@ plt.ylim([0.01,10])
 
 if saveFigures:
     plt.savefig(path_figs+'CurrentStatus/PositiveAfPopulation_Logaritmisk')
+
+
+# %%
 
 
 # %% [markdown]
@@ -507,13 +528,19 @@ if saveFigures:
 
 
 # %%
+dfKeyFull
+
+# %%
 keyDates = dfKeyFull.Date
 
 
 # colsToShow = ['Antal nye bekræftede tilfælde','Antal nye indlæggelser','Antal indlagte i dag med COVID','Antal indlagt i dag på intensiv','Antal indlagt i dag og i respirator','Antal nye døde']
-colsToShow = ['New_Admissions','Hospitalizations','ICU','Respirator','Deaths']
-labelsToUse = ['Nye indlæggelser','Hospitalsbelægning','Indlagte på intensiv','Indlagte i respirator','Dødsfald']
-filenames = ['NewAdmissions','CurrentAdmissions','ICU','Respirator','Deaths']
+# colsToShow = ['New_Admissions','Hospitalizations','ICU','Respirator','Deaths']
+# labelsToUse = ['Nye indlæggelser','Hospitalsbelægning','Indlagte på intensiv','Indlagte i respirator','Dødsfald']
+# filenames = ['NewAdmissions','CurrentAdmissions','ICU','Respirator','Deaths']
+colsToShow = ['New_Admissions','Hospitalizations','ICU','Respirator','Deaths','Tests']
+labelsToUse = ['Nye indlæggelser','Hospitalsbelægning','Indlagte på intensiv','Indlagte i respirator','Dødsfald','PCR-Test']
+filenames = ['NewAdmissions','CurrentAdmissions','ICU','Respirator','Deaths','Tests']
 
 firstDate = np.datetime64('2021-10-25')
 # firstDate = np.datetime64('2021-11-25')
@@ -566,7 +593,7 @@ if saveFigures:
 
 
 # for k in range(1,len(allAxes.flatten())):
-for k in range(1,6):
+for k in range(1,len(colsToShow)+1):
     fig,ax = plt.subplots(1,1,figsize=(12,6),tight_layout=True)
     # ax = allAxes.flatten()[k]
     curCol = colsToShow[k-1]
@@ -601,7 +628,65 @@ for k in range(1,6):
 
 
 # %%
-# filenames[k]
+dfKeyFull.columns
+dfKeyFull
+
+# %%
+k = 5
+fig,ax = plt.subplots(1,1,figsize=(6,6),tight_layout=True)
+# # ax = allAxes.flatten()[k]
+# curData = dfKeyFull['Tests']
+# plotDates = keyDates[keyDates > firstDate]
+# numTests = curData[keyDates > firstDate]
+
+# # curData = dfKeyFull['Cases']
+# # plotDates = keyDates[keyDates > firstDate]
+# # numCases = curData[keyDates > firstDate]
+# numCases = dataNew[keyDates > firstDate].values + dataReIn[keyDates > firstDate].values
+
+curdfToUse = dfKeyFull.iloc[-100:]
+
+numTests = curdfToUse.Tests
+# numCases = curdfToUse.Cases_New + curdfToUse.Cases_Reinfection
+numCases = curdfToUse.Cases_New 
+
+# numTests = np.log(numTests)
+# numCases = np.log(numCases)
+
+# ax.plot(numCases,numTests,'k.:',linewidth=0.5,markersize=2)
+# ax.plot(rnMean(numCases,mw),rnMean(numTests,mw),'k')
+
+ax.plot(numTests,numCases,'k.:',linewidth=0.5,markersize=2)
+ax.plot(rnMean(numTests,mw),rnMean(numCases,mw),'k')
+
+
+numTestTeo = np.linspace(0,500000)
+beta = 0.6
+numCaseTeo = numTestTeo/(np.power(numTestTeo/30000,beta))
+ax.plot(numTestTeo,numCaseTeo)
+numCaseTeo = numTestTeo/(np.power(numTestTeo/20000,beta))
+ax.plot(numTestTeo,numCaseTeo)
+numCaseTeo = numTestTeo/(np.power(numTestTeo/10000,beta))
+ax.plot(numTestTeo,numCaseTeo)
+numCaseTeo = numTestTeo/(np.power(numTestTeo/5000,beta))
+ax.plot(numTestTeo,numCaseTeo)
+
+ax.set_ylim(bottom=0,top=50000)
+ax.set_xlim(left=0)
+
+
+
+# %%
+np.power(30000,beta)
+
+# %%
+
+
+# %%
+
+
+# %%
+
 
 # %%
 # keyDates = dfKey.IndberetningDato
@@ -837,6 +922,7 @@ if saveFigures:
 
 firstDate = np.datetime64('2021-11-01')
 ax1.set_xlim([firstDate,lastDate])
+# ax1.set_xlim([firstDate,np.datetime64('2022-04-01')])
 
 ax1.xaxis.set_major_formatter(mdates.DateFormatter('%B'))
 if saveFigures:
@@ -849,71 +935,74 @@ if saveFigures:
 # if saveFigures:
 #     plt.savefig(path_figs+'CurrentStatus/CasesHospCompare_English2_zoom')
 
+# %%
+
+
 # %% [markdown]
 # # Naive forward-estimation of cases
 
 # %%
 
-allDates = dfCase.Date
-allCases = dfCase.NewPositive.values
+# allDates = dfCase.Date
+# allCases = dfCase.NewPositive.values
 
-allCasesMean = rnMean(allCases[:-1],meanWidth)
-allDatesMean = rnTime(allDates[:-1],meanWidth)
+# allCasesMean = rnMean(allCases[:-1],meanWidth)
+# allDatesMean = rnTime(allDates[:-1],meanWidth)
 
-# Predictions
-startIndex = -7
-dayToStart = allDatesMean.values[startIndex]
-valToStart = allCasesMean[startIndex]
+# # Predictions
+# startIndex = -7
+# dayToStart = allDatesMean.values[startIndex]
+# valToStart = allCasesMean[startIndex]
 
-daysToPredict = 120
+# daysToPredict = 120
 
-dayRange = dayToStart + np.arange(np.timedelta64(0,'D'),np.timedelta64(daysToPredict,'D'))
-tRange = np.arange(0,daysToPredict)
-
-
-
-# Make figure
-fig,ax1 = plt.subplots(tight_layout=True)
-
-posGrows = [0.01,0.05,0.1,0.15]
-# posGrows = np.linspace(0.05,0.12,6)
-posGrows = np.arange(0.05,0.13,0.01)
-posGrows = np.arange(-0.05,0.05,0.01)
-
-for curGrow in posGrows:
-    growYs = valToStart * np.exp(curGrow*tRange)
-    curLabel = f'Growthrate: {curGrow:0.2f}'
-    ax1.plot(dayRange,growYs,'--',linewidth=2,label=curLabel)
+# dayRange = dayToStart + np.arange(np.timedelta64(0,'D'),np.timedelta64(daysToPredict,'D'))
+# tRange = np.arange(0,daysToPredict)
 
 
-# Draw weekends
-firstSunday = np.datetime64('2021-10-03')
-numWeeks = 52
-for k in range(-numWeeks,numWeeks):
-     curSunday = firstSunday + np.timedelta64(7*k,'D')
-     ax1.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
-ax1.grid(axis='y')
-ax1.legend(loc='upper left')
 
-ax1.plot(allDates[:-1],allCases[:-1],'b.:',markersize=6,linewidth=0.75,label='Daglig data')
-ax1.plot(rnTime(allDates[:-1],meanWidth),rnMean(allCases[:-1],meanWidth),'b',linewidth=5,label=f'{meanWidth} dages gennemsnit')
+# # Make figure
+# fig,ax1 = plt.subplots(tight_layout=True)
 
-ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
+# posGrows = [0.01,0.05,0.1,0.15]
+# # posGrows = np.linspace(0.05,0.12,6)
+# posGrows = np.arange(0.05,0.13,0.01)
+# posGrows = np.arange(-0.05,0.05,0.01)
 
-ax1.set_ylim(bottom=0)
-ax1.set_ylim(top=3*np.max(allCases))
-
-ax1.set_xlim(left=firstDate)
-ax1.set_xlim(right=lastDate)
-
-ax1.set_xlim(left=np.datetime64('2021-12-01'))
-
-ax2 = ax1.twinx()
-ax2.set_yticks(ax1.get_yticks())
-ax2.set_ylim(ax1.get_ylim())
+# for curGrow in posGrows:
+#     growYs = valToStart * np.exp(curGrow*tRange)
+#     curLabel = f'Growthrate: {curGrow:0.2f}'
+#     ax1.plot(dayRange,growYs,'--',linewidth=2,label=curLabel)
 
 
-ax1.legend()
+# # Draw weekends
+# firstSunday = np.datetime64('2021-10-03')
+# numWeeks = 52
+# for k in range(-numWeeks,numWeeks):
+#      curSunday = firstSunday + np.timedelta64(7*k,'D')
+#      ax1.axvspan(curSunday-np.timedelta64(1,'D')-np.timedelta64(12,'h'),curSunday+np.timedelta64(12,'h'),zorder=-1,facecolor='lightgrey',label=int(k==0)*'Weekend')
+# ax1.grid(axis='y')
+# ax1.legend(loc='upper left')
+
+# ax1.plot(allDates[:-1],allCases[:-1],'b.:',markersize=6,linewidth=0.75,label='Daglig data')
+# ax1.plot(rnTime(allDates[:-1],meanWidth),rnMean(allCases[:-1],meanWidth),'b',linewidth=5,label=f'{meanWidth} dages gennemsnit')
+
+# ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d\n%b'))
+
+# ax1.set_ylim(bottom=0)
+# ax1.set_ylim(top=3*np.max(allCases))
+
+# ax1.set_xlim(left=firstDate)
+# ax1.set_xlim(right=lastDate)
+
+# ax1.set_xlim(left=np.datetime64('2021-12-01'))
+
+# ax2 = ax1.twinx()
+# ax2.set_yticks(ax1.get_yticks())
+# ax2.set_ylim(ax1.get_ylim())
+
+
+# ax1.legend()
 
 # %%
 

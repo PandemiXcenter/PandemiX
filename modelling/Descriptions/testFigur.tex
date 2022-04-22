@@ -1,0 +1,229 @@
+
+\documentclass[landscape]{article}
+\usepackage{tikz}
+\usepackage[top=3cm]{geometry}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+% \pgfmathsetmacro{\CompSize}{0.5}
+\pgfmathsetmacro{\CompSize}{1 }
+% \pgfmathsetmacro{\CompDist}{2.5 }
+\pgfmathsetmacro{\cd}{2.5}
+% \pgfmathsetmacro{\cd}{4}
+% \definecolor{boxColor}{cmyk}{0.33,0.10,0,0}
+\definecolor{boxColor}{cmyk}{0.2,0.1,0.2,0}
+\definecolor{greyColor}{cmyk}{0.1,0.1,0.1,0}
+% \definecolor{susColor}{cmyk}{0.2,0.1,0.2,0}
+\definecolor{susColor}{cmyk}{0.1,0.1,0.1,0}
+\definecolor{recColor}{cmyk}{0.3,0.1,0.1,0}
+\definecolor{infColor}{cmyk}{0.1,0.3,0.1,0}
+\begin{document}
+
+\begin{tikzpicture}
+    % \node (S) at (0,0) {$S$};
+    \node[rectangle,rounded corners,fill=susColor,draw,minimum size =  \CompSize cm] (S) at (0.15*\cd,0) {\Large $S$};
+    \node[rectangle,rounded corners,fill=susColor!80!infColor,draw,minimum size =  \CompSize cm] (E1) at (\cd,0) {\Large $E_1$};
+    \node[rectangle,rounded corners,fill=susColor!60!infColor,draw,minimum size =  \CompSize cm] (E2) at (1.75*\cd,0) {\Large $E_2$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (P) at (2.5*\cd,0)  {\Large $P$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (A) at (3.5*\cd,0) {\Large $A$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (Q) at (3*\cd,-\cd)  {\Large $Q$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (I) at (3*\cd,\cd) {\Large $I$};
+    \node[rectangle,rounded corners,fill=recColor,draw,minimum size =  \CompSize cm] (Rn) at (4.25*\cd,0) {\Large $R_n$};
+    \node[rectangle,rounded corners,fill=recColor,draw,minimum size =  \CompSize cm] (Rp) at (5*\cd,0) {\Large $R_p$};
+
+    \node (Ps) at ($(P)+(0.5*\cd,0.4*\cd)$) {};
+
+    \draw [-{Latex[scale=2]}] (P) -- (Ps.center) -- (A);
+    \draw [-{Latex[scale=2]}] (Ps.center) -- (I);
+    \node at ($(P)!0.75!(Ps)+(-0.2,0.1)$) {$\gamma$};
+    \node at ($(A)!0.75!(Ps)+(0.7,0.1)$) {$(1-\rho)$};
+    \node at ($(I)!0.75!(Ps)+(0.25,0.1)$) {$\rho$};
+
+
+    \draw [-{Latex[scale=2]}]  (S) -- (E1);
+    \draw [-{Latex[scale=2]}]  (E1) -- (E2);
+    \draw [-{Latex[scale=2]}]  (E2) -- (P);
+    % \draw [-{Latex[scale=2]}]  (P) -- (A);
+    % \draw [-{Latex[scale=2]}]  (P) -- (I);
+    \draw [-{Latex[scale=2]}]  (E2) -- (Q);
+    \draw [-{Latex[scale=2]}]  (P) -- (Q);
+    \draw [-{Latex[scale=2]}]  (A) -- (Q);
+    \draw [-{Latex[scale=2]}]  (A) -- (Rn);
+    \draw [-{Latex[scale=2]}]  (Q) -- ($(Rp)+(0,-\cd)$) -- (Rp);
+    \draw [-{Latex[scale=2]}]  (I) -- ($(Rp)+(0,\cd)$) -- (Rp);
+
+    \draw [-{Latex[scale=1]}]  ($(S)!0.5!(E1) + (0,0.8)$) -- ($(S)!0.5!(E1)$);
+    \node at ($(S)!0.5!(E1) + (0,1)$) {$\beta (P+A)$};
+
+    \node at ($(E1)!0.5!(E2)+(0,0.5)$) {$\gamma$};
+    \node at ($(E2)!0.5!(P)+(0,0.5)$) {$\gamma$};
+    % \node at ($(P)!0.5!(A)+(0,0.5)$) {$(1-\rho)\gamma$};
+    % \node at ($(P)!0.5!(I)+(-0.25,0.5)$) {$\rho \gamma$};
+    % \node at ($(P)!0.5!(I)+(0,0.5)$) {$\rho \gamma$};
+    \node at ($(E2)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+    \node at ($(P)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+    \node at ($(A)!0.5!(Q)+(-0.2,0.2)$) {$\tau$};
+    \node at ($(A)!0.5!(Rn)+(0,0.5)$) {$\nu$};
+    \node at ($(I)+(1,0.5)$) {$\nu$};
+    \node at ($(Q)+(3,0.5)$) {$\nu$};
+
+\end{tikzpicture}
+
+\vspace*{1cm}
+
+\begin{tikzpicture}
+    \node[rectangle,rounded corners,fill=susColor,draw,minimum size =  \CompSize cm] (S) at (0,0) {\Large $S$};
+    \node[rectangle,rounded corners,fill=susColor!80!infColor,draw,minimum size =  \CompSize cm] (E1) at (\cd,0) {\Large $E_1$};
+    \node[rectangle,rounded corners,fill=susColor!60!infColor,draw,minimum size =  \CompSize cm] (E2) at (2*\cd,0) {\Large $E_2$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (P) at (3*\cd,0)  {\Large $P$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (A) at (4*\cd,0) {\Large $A$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (Q) at (3.5*\cd,-\cd)  {\Large $Q$};
+    \node[rectangle,rounded corners,fill=infColor,draw,minimum size =  \CompSize cm] (I) at (3.5*\cd,\cd) {\Large $I$};
+    % \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (I) at (4*\cd,\cd) {\Large $I$};
+    \node[rectangle,rounded corners,fill=recColor,draw,minimum size =  \CompSize cm] (Rn) at (5*\cd,0) {\Large $R_n$};
+    \node[rectangle,rounded corners,fill=recColor,draw,minimum size =  \CompSize cm] (Rp) at (6*\cd,0) {\Large $R_p$};
+
+
+    \draw [-{Latex[scale=2]}]  (S) -- (E1);
+    \draw [-{Latex[scale=2]}]  (E1) -- (E2);
+    \draw [-{Latex[scale=2]}]  (E2) -- (P);
+    \draw [-{Latex[scale=2]}]  (P) -- (A);
+    \draw [-{Latex[scale=2]}]  (P) -- (I);
+    \draw [-{Latex[scale=2]}]  (E2) -- (Q);
+    \draw [-{Latex[scale=2]}]  (P) -- (Q);
+    \draw [-{Latex[scale=2]}]  (A) -- (Q);
+    \draw [-{Latex[scale=2]}]  (A) -- (Rn);
+    \draw [-{Latex[scale=2]}]  (Q) -- ($(Rp)+(0,-\cd)$) -- (Rp);
+    \draw [-{Latex[scale=2]}]  (I) -- ($(Rp)+(0,\cd)$) -- (Rp);
+
+    \draw [-{Latex[scale=1]}]  ($(S)!0.5!(E1) + (0,0.8)$) -- ($(S)!0.5!(E1)$);
+    \node at ($(S)!0.5!(E1) + (0,1)$) {$\beta (P+A)$};
+
+    \node at ($(E1)!0.5!(E2)+(0,0.5)$) {$\gamma$};
+    \node at ($(E2)!0.5!(P)+(0,0.5)$) {$\gamma$};
+    \node at ($(P)!0.5!(A)+(0,0.5)$) {$(1-\rho)\gamma$};
+    \node at ($(P)!0.5!(I)+(-0.25,0.5)$) {$\rho \gamma$};
+    \node at ($(E2)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+    \node at ($(P)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+    \node at ($(A)!0.5!(Q)+(-0.2,0.2)$) {$\tau$};
+    \node at ($(A)!0.5!(Rn)+(0,0.5)$) {$\nu$};
+    \node at ($(I)+(1,0.5)$) {$\nu$};
+    \node at ($(Q)+(3,0.5)$) {$\nu$};
+
+\end{tikzpicture}
+
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (E2) at ($(E1)+(\cd,0)$) {$E_2$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (P) at ($(E2)+(\cd,0)$)  {$P$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Q) at ($(P)+(0,-\cd)$)  {$Q$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (A) at ($(P)+(\cd,0)$) {$A$};
+% % \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (I) at ($(A)+(0,\cd)$) {$I$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (I) at ($(P)+(0,\cd)$) {$I$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Rn) at ($(A)+(\cd,0)$) {$R_n$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Rp) at ($(Rn)+(\cd,0)$) {$R_p$};
+
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (S) at (0,0) {$S$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (E1) at (2,0) {$E_1$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (E2) at ($(E1)+(2,0)$) {$E_2$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (P) at ($(E2)+(2,0)$)  {$P$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Q) at ($(P)+(0,-2)$)  {$Q$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (A) at ($(P)+(2,0)$) {$A$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (I) at ($(A)+(0,2)$) {$I$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Rn) at ($(A)+(2,0)$) {$R_n$};
+% \node[rectangle,rounded corners,draw,minimum size =  \CompSize cm] (Rp) at ($(Rn)+(2,0)$) {$R_p$};
+
+% \draw [-{Latex[scale=2]}]  (S) -- (E1);
+% \draw [-{Latex[scale=2]}]  (E1) -- (E2);
+% \draw [-{Latex[scale=2]}]  (E2) -- (P);
+% \draw [-{Latex[scale=2]}]  (P) -- (A);
+% \draw [-{Latex[scale=2]}]  (P) -- (I);
+% \draw [-{Latex[scale=2]}]  (E2) -- (Q);
+% \draw [-{Latex[scale=2]}]  (P) -- (Q);
+% \draw [-{Latex[scale=2]}]  (A) -- (Q);
+% \draw [-{Latex[scale=2]}]  (A) -- (Rn);
+% \draw [-{Latex[scale=2]}]  (Q) -- ($(Rp)+(0,-2)$) -- (Rp);
+% \draw [-{Latex[scale=2]}]  (I) -- ($(Rp)+(0,2)$) -- (Rp);
+
+% \draw [-{Latex[scale=2]}]  ($(S)!0.5!(E1) + (0,0.8)$) -- ($(S)!0.5!(E1)$);
+% \node at ($(S)!0.5!(E1) + (0,1)$) {$\beta (P+A)$};
+
+% \node at ($(E1)!0.5!(E2)+(0,0.5)$) {$\gamma$};
+% \node at ($(E2)!0.5!(P)+(0,0.5)$) {$\gamma$};
+% \node at ($(P)!0.5!(A)+(0,0.5)$) {$(1-\rho)\gamma$};
+% \node at ($(P)!0.5!(I)+(0,0.5)$) {$\rho \gamma$};
+% \node at ($(E2)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+% \node at ($(P)!0.5!(Q)+(0.2,0.2)$) {$\tau$};
+% \node at ($(A)!0.5!(Q)+(-0.2,0.2)$) {$\tau$};
+% \node at ($(A)!0.5!(Rn)+(0,0.5)$) {$\nu$};
+% \node at ($(I)+(1,0.5)$) {$\nu$};
+% \node at ($(Q)+(3,0.5)$) {$\nu$};
+
+
+
+
+
+
+    % \draw[rounded corners] ($(S)-(\CompSize,\CompSize)$) rectangle ($(S)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(E1)-(\CompSize,\CompSize)$) rectangle ($(E1)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(E2)-(\CompSize,\CompSize)$) rectangle ($(E2)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(P)-(\CompSize,\CompSize)$) rectangle ($(P)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(A)-(\CompSize,\CompSize)$) rectangle ($(A)+(\CompSize,\CompSize)$) ;
+    % \draw[rounded corners] ($(I)-(\CompSize,\CompSize)$) rectangle ($(I)+(\CompSize,\CompSize)$) ;
+
+% \begin{tikzpicture}[scale=2,every node/.style={scale=2}]
+%     % Niche as a wall
+%     \draw[rounded corners,fill=lightgrey,opacity=0.5,dotted] (-3,-0.75) rectangle (3,0.75);
+%     \node (nicheBorder) at (0,1){}; % For feedback on the niche
+%     \draw[rounded corners,fill=nicheCellColor] (-4,-0.75) rectangle (4,-1.25);
+%     % HSC
+%     %\node[minimum size = 1cm,circle,fill=cellColor,draw] (NC) at (-1.5,0) {$N_x$};
+%     %\node[minimum size = 1cm,circle,fill=cellColor2,draw] (NL) at (1.5,0) {$N_y$};
+%     \node[minimum size = 1cm,circle,fill=cellColor,draw] (NC) at (-2,0) {$N_H$};
+%     \node[minimum size = 1cm,circle,fill=cellColor2,draw] (NL) at (2,0) {$N_L$};
+%     % Mature
+%     \node[minimum size = 1cm,circle,fill=cellColor,draw] (MC) at (-2,2.5) {$M_H$};
+%     \node[minimum size = 1cm,circle,fill=cellColor2,draw] (ML) at (2,2.5) {$M_L$};
+%     % Dead cells / Debris
+%     \node[minimum size = 1cm,circle,fill=lightgrey,draw] (a) at (0,4) {$D$};
+%     % Immune system
+%     \node[minimum size = 1cm,rounded corners,fill=lightgrey,draw] (s) at (0,2) {$S$};
+%     % Arrow and multiplication to mature
+%     \node[circle,minimum size = 1mm, draw] (multC) at ($(MC)!0.5!(NC)$){};
+%     \node[circle,minimum size = 1mm, draw] (multL) at ($(ML)!0.5!(NL)$){};
+%     \node (xC) at (multC) {$\times$};
+%     \node (xL) at (multL) {$\times$};
+%     \draw[-Latex] (NC) -- (multC) node [pos=0.5,left] {}; 
+%     \draw[-Latex] (multC) -- (MC) node [pos=0.5,left] {};
+%     \draw[-Latex] (NL) -- (multL) node [pos=0.5,right] {};
+%     \draw[-Latex] (multL) -- (ML) node [pos=0.5,right] {};
+%     % Rest of the arrows
+%     \draw[-Latex] (MC) -- (a) node [pos=0.5,left] {};
+%     \draw[-Latex] (ML) -- (a) node [pos=0.5,right] {};
+%     \draw[-Latex] (a) -- (s) node [pos=0.5,right] {};
+%     \node (aOut) at ($(a)+(0,1.2)$){};
+%     \draw[-Latex] (a) -- (aOut) node [pos=0.5,left] {};
+%     % Immune system respone
+%     %\draw[-Latex,dotted,color=red,very thick] (s) -- (nicheBorder);
+%     \draw[-Latex] (s) -- (nicheBorder) node [pos=0.5,left] {};;
+%     \node (elimS) at (nicheBorder) {\tiny Eliminated};
+%     \node (elimA) at (aOut) {\tiny Eliminated};
+%     \draw[-Latex,dotted,color=red,very thick] (s) to[out=45, in=0] ($(aOut)!0.33!(a)$);
+%     %\draw[-Latex,dotted,color=red,very thick] (s) to[out=215, in=45] (NC);
+%     %\draw[-Latex,dotted,color=red,very thick] (s) to[out=-45, in=-215] (NL);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- (NC);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- (NL);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- ($(multC)!0.4!(NC)$);
+%     \draw[-Latex,dotted,color=red,very thick] (s) -- ($(multL)!0.4!(NL)$);
+    
+%     % Limiting arrow from NH to NL
+%     \draw[-|,thick] ($(NC)!0.2!(NL)$) -- ($(NC)!0.8!(NL)$);
+%     \draw[-|,thick] ($(NL)!0.2!(NC)$) -- ($(NL)!0.8!(NC)$);
+%     %\draw[-|,thick] (NL.west) -- (NC.east);
+    
+%     % Lightning
+%     \node at ($(s.north west)!0.15!(a.south west)$) [color=YellowOrange,xscale=-1]{\large \Lightning \; };
+%     %\node at (s.north west) [above=3mm]{$I$};
+%     \end{tikzpicture}
+
+% \section{Model-description}
+
+\end{document}
