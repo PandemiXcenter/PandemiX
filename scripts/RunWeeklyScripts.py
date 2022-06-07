@@ -29,15 +29,15 @@ exec(open("DanishAgeDistributions.py",'r',encoding='utf-8').read())
 print('-------- Done with age-distribution figures --------')
 
 
-print('-------- Immunity-overview figures --------')
+#print('-------- Immunity-overview figures --------')
 
-exec(open("ImmunityOverview.py",'r',encoding='utf-8').read())
+#exec(open("ImmunityOverview.py",'r',encoding='utf-8').read())
 
-print('-------- Done with immunity-overview figures --------')
+#print('-------- Done with immunity-overview figures --------')
 
 
-print('-------- OverviewDeaths figures --------')
+#print('-------- OverviewDeaths figures --------')
 
-exec(open("OverviewDeathsStartApril.py",'r',encoding='utf-8').read())
+#exec(open("OverviewDeathsStartApril.py",'r',encoding='utf-8').read())
 
-print('-------- Done with death-overview figures --------')
+#print('-------- Done with death-overview figures --------')
