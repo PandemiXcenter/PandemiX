@@ -1,0 +1,26 @@
+figure.figsize : 12,8
+figure.facecolor : xkcd:off white
+axes.facecolor : xkcd:off white
+savefig.facecolor : xkcd:off white
+
+
+image.cmap : tab10
+axes.prop_cycle: cycler('color', ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf']) # default (tab10)
+# image.cmap : Dark2
+# axes.prop_cycle: cycler('color', ['1b9e77' , 'd95f02' , '7570b3' , 'e7298a' , '66a61e' , 'e6ab02' , 'a6761d' , '666666']) # Dark2
+figure.autolayout : True
+
+figure.titlesize : 26
+figure.titleweight : 600
+axes.titlesize : 24
+axes.labelsize : 20
+lines.linewidth : 3
+lines.markersize : 10
+xtick.labelsize : 18
+ytick.labelsize : 18
+
+axes.spines.top : False
+axes.spines.right : False
+
+axes.grid : True
+axes.grid.axis : y
