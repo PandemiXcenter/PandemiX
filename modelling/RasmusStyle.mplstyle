@@ -1,0 +1,21 @@
+figure.figsize : 12,8
+figure.facecolor : xkcd:off white
+axes.facecolor : xkcd:off white
+savefig.facecolor : xkcd:off white
+
+figure.autolayout : True
+
+figure.titlesize : 26
+figure.titleweight : 600
+axes.titlesize : 24
+axes.labelsize : 20
+lines.linewidth : 3
+lines.markersize : 10
+xtick.labelsize : 18
+ytick.labelsize : 18
+
+axes.spines.top : False
+axes.spines.right : False
+
+axes.grid : True
+axes.grid.axis : y
