@@ -3,6 +3,7 @@
 import zipfile
 import io
 import os
+from tqdm import tqdm 
 
 # Define paths
 rootdir_data = os.getcwd() +"/../DanskeData/" 
@@ -16,7 +17,7 @@ path_vacc = rootdir_data + "ssi_vacc"
 curRoot = path_data
 curFiles = os.listdir(curRoot+'_zipped')
 
-for thisFile in curFiles:
+for thisFile in tqdm(curFiles):
 
     filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
@@ -32,7 +33,7 @@ print('Done extracting all "overvågningsdata" files')
 curRoot = path_dash
 curFiles = os.listdir(curRoot+'_zipped')
 
-for thisFile in curFiles:
+for thisFile in tqdm(curFiles):
 
     filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
@@ -48,7 +49,7 @@ print('Done extracting all "dashboard" files')
 curRoot = path_vacc
 curFiles = os.listdir(curRoot+'_zipped')
 
-for thisFile in curFiles:
+for thisFile in tqdm(curFiles):
 
     filename = "/" + thisFile[:-4]
     zipped_save_path = curRoot + "_zipped" + filename + ".zip"
